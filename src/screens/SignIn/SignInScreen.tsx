@@ -4,15 +4,36 @@ import LinearGradient from 'react-native-linear-gradient';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { Controller, useForm } from 'react-hook-form';
+import auth from '@react-native-firebase/auth';
 import { Colors } from '../../styles';
 import { Text, Input, Button } from '../../components';
 import styles from './SignInScreen.styles';
 
 const SignInScreen = () => {
   const navigation = useNavigation();
+
   const { control, handleSubmit, errors } = useForm();
+
   const onSubmit = (data: any) => {
-    console.log(data);
+    auth()
+      .signInWithEmailAndPassword(
+        data.email,
+        data.password,
+      )
+      .then(() => {
+        console.log('Signed in!');
+      })
+      .catch((error) => {
+        // if (error.code === 'auth/email-already-in-use') {
+        //   console.log('That email address is already in use!');
+        // }
+  
+        // if (error.code === 'auth/invalid-email') {
+        //   console.log('That email address is invalid!');
+        // }
+  
+        console.error(error);
+      });
   };
 
   return (
