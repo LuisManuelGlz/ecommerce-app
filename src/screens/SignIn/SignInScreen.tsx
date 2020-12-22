@@ -16,10 +16,7 @@ const SignInScreen = () => {
 
   const onSubmit = (data: any) => {
     auth()
-      .signInWithEmailAndPassword(
-        data.email,
-        data.password,
-      )
+      .signInWithEmailAndPassword(data.email, data.password)
       .then(() => {
         console.log('Signed in!');
       })
@@ -27,11 +24,11 @@ const SignInScreen = () => {
         // if (error.code === 'auth/email-already-in-use') {
         //   console.log('That email address is already in use!');
         // }
-  
+
         // if (error.code === 'auth/invalid-email') {
         //   console.log('That email address is invalid!');
         // }
-  
+
         console.error(error);
       });
   };
@@ -42,11 +39,13 @@ const SignInScreen = () => {
       colors={[Colors.dark, Colors.primary]}
       start={{ x: 0.0, y: 0.7 }}
       end={{ x: 0.0, y: 1.4 }}>
-      <Text.H2 style={styles.title}>Bienvenido</Text.H2>
+      <Text size="h2" style={styles.title}>
+        Bienvenido
+      </Text>
 
       <View style={styles.formContainer}>
         <View style={styles.fieldContainer}>
-          <Text.H5>Correo</Text.H5>
+          <Text size="h5">Correo</Text>
           <Controller
             control={control}
             render={({ onChange, onBlur, value }) => (
@@ -69,13 +68,15 @@ const SignInScreen = () => {
           />
           <View>
             {errors.email && (
-              <Text.H4 danger>El correo electrónico es requerido.</Text.H4>
+              <Text size="h4" color="danger">
+                El correo electrónico es requerido.
+              </Text>
             )}
           </View>
         </View>
 
         <View style={styles.fieldContainer}>
-          <Text.H5>Contraseña</Text.H5>
+          <Text size="h5">Contraseña</Text>
           <Controller
             control={control}
             render={({ onChange, onBlur, value }) => (
@@ -99,7 +100,9 @@ const SignInScreen = () => {
           />
           <View>
             {errors.password && (
-              <Text.H4 danger>La contraseña es requerida.</Text.H4>
+              <Text size="h4" color="danger">
+                La contraseña es requerida.
+              </Text>
             )}
           </View>
         </View>
@@ -108,7 +111,7 @@ const SignInScreen = () => {
       <View style={styles.buttonsContainer}>
         <Button
           style={styles.signInButton}
-          primary
+          background="primary"
           block
           title="Iniciar sesión"
           onPress={handleSubmit(onSubmit)}
@@ -116,7 +119,7 @@ const SignInScreen = () => {
 
         <Button
           style={styles.signInButton}
-          google
+          background="google"
           block
           title="Iniciar sesión con Google"
           icon={<Ionicons name="logo-google" size={30} color={Colors.light} />}
@@ -124,7 +127,7 @@ const SignInScreen = () => {
 
         <Button
           style={styles.signInButton}
-          facebook
+          background="facebook"
           block
           title="Iniciar sesión con Facebook"
           icon={
@@ -134,19 +137,22 @@ const SignInScreen = () => {
 
         <Button
           style={styles.signInButton}
-          twitter
+          background="twitter"
           block
           title="Iniciar sesión con Twitter"
           icon={<Ionicons name="logo-twitter" size={30} color={Colors.light} />}
         />
       </View>
 
-      <Text.H6 style={styles.goToSignUpText}>
+      <Text size="h6" style={styles.goToSignUpText}>
         No tienes una cuenta{' '}
-        <Text.H6 primary onPress={() => navigation.navigate('SignUpStepOne')}>
+        <Text
+          size="h6"
+          color="primary"
+          onPress={() => navigation.navigate('SignUpStepOne')}>
           Regístrate aquí
-        </Text.H6>
-      </Text.H6>
+        </Text>
+      </Text>
     </LinearGradient>
   );
 };

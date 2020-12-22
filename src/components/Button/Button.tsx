@@ -2,61 +2,43 @@ import React from 'react';
 import {
   Text,
   TouchableOpacity,
-  StyleProp,
-  ViewStyle,
   View,
+  TouchableOpacityProps,
 } from 'react-native';
 import styles from './Button.styles';
 
-interface Props {
-  style?: StyleProp<ViewStyle>;
+interface Props extends TouchableOpacityProps {
   block?: boolean;
   title?: string;
-  primary?: boolean;
-  google?: boolean;
-  facebook?: boolean;
-  twitter?: boolean;
-  danger?: boolean;
+  background?: 'primary' | 'danger' | 'google' | 'facebook' | 'twitter';
   icon?: any;
-  onPress?: () => void;
 }
 
-const Primary = ({
-  style,
-  block,
-  title,
-  primary,
-  google,
-  facebook,
-  twitter,
-  danger,
-  icon,
-  onPress,
-}: Props) => {
-  const customStyle = [styles.default, !icon && styles.buttonHasIcon, style];
+const Button = ({ style, title, block, background, icon, ...rest }: Props) => {
+  const customStyles = [styles.default, !icon && styles.buttonHasIcon, style];
+
+  const applyButtonBackground = {
+    primary: () => customStyles.push(styles.backgroundPrimary),
+    danger: () => customStyles.push(styles.backgroundDanger),
+    google: () => customStyles.push(styles.backgroundGoogle),
+    facebook: () => customStyles.push(styles.backgroundFacebook),
+    twitter: () => customStyles.push(styles.backgroundTwitter),
+  };
 
   if (block) {
-    customStyle.push(styles.block);
+    customStyles.push(styles.block);
   }
 
-  if (primary) {
-    customStyle.push(styles.backgroundPrimary);
-  } else if (google) {
-    customStyle.push(styles.backgroundGoogle);
-  } else if (facebook) {
-    customStyle.push(styles.backgroundFacebook);
-  } else if (twitter) {
-    customStyle.push(styles.backgroundTwitter);
-  } else if (danger) {
-    customStyle.push(styles.backgroundDanger);
+  if (background) {
+    applyButtonBackground[background]();
   }
 
   return (
-    <TouchableOpacity style={customStyle} onPress={onPress}>
+    <TouchableOpacity style={customStyles} {...rest}>
       {icon && <View style={styles.buttonIcon}>{icon}</View>}
       <Text style={styles.buttonTitle}>{title}</Text>
     </TouchableOpacity>
   );
 };
 
-export default Primary;
+export default Button;

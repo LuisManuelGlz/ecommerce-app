@@ -9,33 +9,39 @@ interface Props extends TextInputProps {
   iconOutside?: any;
 }
 
-const Input = (props: Props) => {
+const Input = ({
+  style,
+  iconLeft,
+  iconRight,
+  iconOutside,
+  placeholder,
+  secureTextEntry,
+  value,
+  onChangeText,
+  ...rest
+}: Props) => {
   return (
-    <View style={[styles.container, props.style]}>
+    <View style={[styles.container, style]}>
       <View
         style={[
           styles.inputContainer,
-          props.iconOutside && styles.inputWithIconOutside,
+          iconOutside && styles.inputWithIconOutside,
         ]}>
-        <View>{props.iconLeft}</View>
+        <View>{iconLeft}</View>
         <TextInput
           placeholderTextColor={Colors.duality}
           style={styles.input}
-          placeholder={props.placeholder}
-          secureTextEntry={props.secureTextEntry}
-          value={props.value}
-          onChangeText={props.onChangeText}
-          {...props}
+          placeholder={placeholder}
+          secureTextEntry={secureTextEntry}
+          value={value}
+          onChangeText={onChangeText}
+          {...rest}
         />
-        <View>{props.iconRight}</View>
+        <View>{iconRight}</View>
       </View>
-      <View>{props.iconOutside}</View>
+      <View>{iconOutside}</View>
     </View>
   );
 };
-
-// Input.defaultProps = {
-//   secureTextEntry: false,
-// };
 
 export default Input;

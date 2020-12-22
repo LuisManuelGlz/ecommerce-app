@@ -28,7 +28,7 @@ const RootNavigator = ({ isAuthenticated }: Props) => {
 
   if (initializing) return null;
 
-  return user ? (
+  return false ? (
     <RootStack.Navigator>
       <RootStack.Screen
         name="Main"

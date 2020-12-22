@@ -6,7 +6,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     borderRadius: 50,
     width: 300,
-    height: 50,
+    height: 51,
     paddingHorizontal: 10,
     alignItems: 'center',
   },

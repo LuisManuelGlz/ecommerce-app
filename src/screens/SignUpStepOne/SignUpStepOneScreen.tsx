@@ -22,15 +22,17 @@ const SignUpStepOneScreen = () => {
       colors={[Colors.dark, Colors.primary]}
       start={{ x: 0.0, y: 0.7 }}
       end={{ x: 0.0, y: 1.4 }}>
-      <Text.H2 style={styles.title}>Regístrate usando</Text.H2>
+      <Text size="h2" style={styles.title}>
+        Regístrate usando
+      </Text>
 
       <View style={styles.socialButtonsContainer}>
         <SocialButton
-          google
+          background="google"
           icon={<Ionicons name="logo-google" size={50} color={Colors.light} />}
         />
         <SocialButton
-          facebook
+          background="facebook"
           icon={
             <Ionicons
               style={{ marginLeft: -5 }}
@@ -41,20 +43,20 @@ const SignUpStepOneScreen = () => {
           }
         />
         <SocialButton
-          twitter
+          background="twitter"
           icon={<Ionicons name="logo-twitter" size={40} color={Colors.light} />}
         />
       </View>
 
       <View style={styles.divider}>
         <View style={styles.lineHorizontal} />
-        <Text.H6>O usando tu correo</Text.H6>
+        <Text size="h6">O usando tu correo</Text>
         <View style={styles.lineHorizontal} />
       </View>
 
       <View style={styles.formContainer}>
         <View style={styles.fieldContainer}>
-          <Text.H5>Correo</Text.H5>
+          <Text size="h5">Correo</Text>
           <Controller
             control={control}
             render={({ onChange, onBlur, value }) => (
@@ -74,13 +76,15 @@ const SignUpStepOneScreen = () => {
           />
           <View>
             {errors.email && (
-              <Text.H4 danger>El correo electrónico es requerido.</Text.H4>
+              <Text size="h4" color="danger">
+                El correo electrónico es requerido.
+              </Text>
             )}
           </View>
         </View>
 
         <View style={styles.fieldContainer}>
-          <Text.H5>Contraseña</Text.H5>
+          <Text size="h5">Contraseña</Text>
           <Controller
             control={control}
             render={({ onChange, onBlur, value }) => (
@@ -101,7 +105,9 @@ const SignUpStepOneScreen = () => {
           />
           <View>
             {errors.password && (
-              <Text.H4 danger>La contraseña es requerida.</Text.H4>
+              <Text size="h4" color="danger">
+                La contraseña es requerida.
+              </Text>
             )}
           </View>
         </View>
@@ -120,30 +126,36 @@ const SignUpStepOneScreen = () => {
             rules={{ required: true }}
             defaultValue={false}
           />
-          <Text.H6>
+          <Text size="h6">
             Acepto los{' '}
-            <Text.H6 primary onPress={() => console.log('Terms')}>
+            <Text
+              size="h6"
+              color="primary"
+              onPress={() => console.log('Terms')}>
               Términos y condiciones
-            </Text.H6>
-          </Text.H6>
+            </Text>
+          </Text>
         </View>
       </View>
 
       <View style={styles.buttonsContainer}>
         <Button
-          primary
+          background="primary"
           block
           title="Continuar"
           onPress={() => navigation.navigate('SignUpStepTwo')}
         />
       </View>
 
-      <Text.H6 style={styles.goToSignInText}>
+      <Text size="h6" style={styles.goToSignInText}>
         Ya tienes una cuenta{' '}
-        <Text.H6 primary onPress={() => navigation.navigate('SignIn')}>
+        <Text
+          size="h6"
+          color="primary"
+          onPress={() => navigation.navigate('SignIn')}>
           Inicia sesión aquí
-        </Text.H6>
-      </Text.H6>
+        </Text>
+      </Text>
     </LinearGradient>
   );
 };

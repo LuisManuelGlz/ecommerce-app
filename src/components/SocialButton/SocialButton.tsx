@@ -1,45 +1,33 @@
 import React from 'react';
 import {
-  Text,
   TouchableOpacity,
-  StyleProp,
-  ViewStyle,
-  View,
+  TouchableOpacityProps,
 } from 'react-native';
 import styles from './SocialButton.styles';
 
-interface Props {
-  style?: StyleProp<ViewStyle>;
-  google?: boolean;
-  facebook?: boolean;
-  twitter?: boolean;
+interface Props extends TouchableOpacityProps {
+  background: 'google' | 'facebook' | 'twitter';
   icon: any;
-  onPress?: () => void;
 }
 
-const Primary = ({
-  style,
-  google,
-  facebook,
-  twitter,
-  icon,
-  onPress,
-}: Props) => {
-  const customStyle = [styles.default, style];
+const SocialButton = ({ style, background, icon, ...rest }: Props) => {
+  const customStyles = [styles.default, style];
 
-  if (google) {
-    customStyle.push(styles.backgroundGoogle);
-  } else if (facebook) {
-    customStyle.push(styles.backgroundFacebook);
-  } else if (twitter) {
-    customStyle.push(styles.backgroundTwitter);
+  const applyButtonBackground = {
+    google: () => customStyles.push(styles.backgroundGoogle),
+    facebook: () => customStyles.push(styles.backgroundFacebook),
+    twitter: () => customStyles.push(styles.backgroundTwitter),
+  };
+
+  if (background) {
+    applyButtonBackground[background]();
   }
 
   return (
-    <TouchableOpacity style={customStyle} onPress={onPress}>
+    <TouchableOpacity style={customStyles} {...rest}>
       {icon}
     </TouchableOpacity>
   );
 };
 
-export default Primary;
+export default SocialButton;

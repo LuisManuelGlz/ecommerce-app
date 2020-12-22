@@ -21,11 +21,13 @@ const SignUpStepOneScreen = () => {
       colors={[Colors.dark, Colors.primary]}
       start={{ x: 0.0, y: 0.7 }}
       end={{ x: 0.0, y: 1.4 }}>
-      <Text.H2 style={styles.title}>Detalles personales</Text.H2>
+      <Text size="h2" style={styles.title}>
+        Detalles personales
+      </Text>
 
       <View style={styles.formContainer}>
         <View style={styles.fieldContainer}>
-          <Text.H5>Nombre completo</Text.H5>
+          <Text size="h5">Nombre completo</Text>
           <Controller
             control={control}
             render={({ onChange, onBlur, value }) => (
@@ -48,13 +50,15 @@ const SignUpStepOneScreen = () => {
           />
           <View>
             {errors.fullName && (
-              <Text.H4 danger>El correo electrónico es requerido.</Text.H4>
+              <Text size="h4" color="danger">
+                El correo electrónico es requerido.
+              </Text>
             )}
           </View>
         </View>
 
         <View style={styles.fieldContainer}>
-          <Text.H5>Dirección</Text.H5>
+          <Text size="h5">Dirección</Text>
           <Controller
             control={control}
             render={({ onChange, onBlur, value }) => (
@@ -81,13 +85,15 @@ const SignUpStepOneScreen = () => {
           />
           <View>
             {errors.address && (
-              <Text.H4 danger>La contraseña es requerida.</Text.H4>
+              <Text size="h6" color="danger">
+                La contraseña es requerida.
+              </Text>
             )}
           </View>
         </View>
 
         <View style={styles.fieldContainer}>
-          <Text.H5>Número de tarjeta</Text.H5>
+          <Text size="h5">Número de tarjeta</Text>
           <Controller
             control={control}
             render={({ onChange, onBlur, value }) => (
@@ -112,7 +118,9 @@ const SignUpStepOneScreen = () => {
           />
           <View>
             {errors.cardNumber && (
-              <Text.H4 danger>La contraseña es requerida.</Text.H4>
+              <Text size="h4" color="danger">
+                La contraseña es requerida.
+              </Text>
             )}
           </View>
         </View>
@@ -120,7 +128,7 @@ const SignUpStepOneScreen = () => {
 
       <View style={styles.buttonsContainer}>
         <Button
-          primary
+          background="primary"
           block
           title="Regístrate con nosotros"
           onPress={() => navigation.navigate('Home')}
