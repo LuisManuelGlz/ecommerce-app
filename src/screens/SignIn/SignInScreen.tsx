@@ -34,6 +34,9 @@ const SignInScreen = () => {
                 placeholder="Escribe tu correo electrónico"
                 onChangeText={(value: string) => onChange(value)}
                 value={value}
+                iconRight={
+                  <Ionicons name="close" size={24} color={Colors.duality} />
+                }
                 iconOutside={
                   <Ionicons name="mail" size={24} color={Colors.light} />
                 }
@@ -57,9 +60,13 @@ const SignInScreen = () => {
             render={({ onChange, onBlur, value }) => (
               <Input
                 onBlur={onBlur}
+                secureTextEntry
                 placeholder="Escribe tu contraseña"
                 onChangeText={(value: string) => onChange(value)}
                 value={value}
+                iconRight={
+                  <Ionicons name="close" size={24} color={Colors.duality} />
+                }
                 iconOutside={
                   <Ionicons name="lock-closed" size={24} color={Colors.light} />
                 }

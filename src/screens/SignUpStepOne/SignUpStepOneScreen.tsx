@@ -64,7 +64,7 @@ const SignUpStepOneScreen = () => {
                 onChangeText={(value: string) => onChange(value)}
                 value={value}
                 iconRight={
-                  <Ionicons name="close" size={24} color={Colors.light} />
+                  <Ionicons name="close" size={24} color={Colors.duality} />
                 }
               />
             )}
@@ -86,11 +86,12 @@ const SignUpStepOneScreen = () => {
             render={({ onChange, onBlur, value }) => (
               <Input
                 onBlur={onBlur}
+                secureTextEntry
                 placeholder="Escribe tu contraseña"
                 onChangeText={(value: string) => onChange(value)}
                 value={value}
                 iconRight={
-                  <Ionicons name="close" size={24} color={Colors.light} />
+                  <Ionicons name="close" size={24} color={Colors.duality} />
                 }
               />
             )}
