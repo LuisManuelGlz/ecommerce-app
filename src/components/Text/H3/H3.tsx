@@ -1,11 +1,10 @@
 import React from 'react';
-import { Text, StyleProp, TextStyle } from 'react-native';
+import { Text, TextProps } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import globalStyles from '../styles';
 import styles from './H3.styles';
 
-interface Props {
-  style?: StyleProp<TextStyle>;
+interface Props extends TextProps {
   children: React.ReactNode;
   primary?: boolean;
   danger?: boolean;
@@ -24,7 +23,7 @@ const H3 = (props: Props) => {
     customStyles.push(globalStyles.danger);
   }
 
-  return <Text style={customStyles} {...props} />;
+  return <Text {...props} style={customStyles} onPress={props.onPress} />;
 };
 
 export default H3;

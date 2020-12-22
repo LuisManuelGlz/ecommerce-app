@@ -1,6 +1,11 @@
 import React from 'react';
-import { Text, TouchableOpacity, StyleProp, ViewStyle } from 'react-native';
-import { Colors } from '../../styles';
+import {
+  Text,
+  TouchableOpacity,
+  StyleProp,
+  ViewStyle,
+  View,
+} from 'react-native';
 import styles from './Button.styles';
 
 interface Props {
@@ -8,6 +13,9 @@ interface Props {
   block?: boolean;
   title?: string;
   primary?: boolean;
+  google?: boolean;
+  facebook?: boolean;
+  twitter?: boolean;
   danger?: boolean;
   icon?: any;
   onPress?: () => void;
@@ -18,11 +26,14 @@ const Primary = ({
   block,
   title,
   primary,
+  google,
+  facebook,
+  twitter,
   danger,
   icon,
   onPress,
 }: Props) => {
-  const customStyle = [styles.default, style];
+  const customStyle = [styles.default, !icon && styles.buttonHasIcon, style];
 
   if (block) {
     customStyle.push(styles.block);
@@ -30,17 +41,20 @@ const Primary = ({
 
   if (primary) {
     customStyle.push(styles.backgroundPrimary);
+  } else if (google) {
+    customStyle.push(styles.backgroundGoogle);
+  } else if (facebook) {
+    customStyle.push(styles.backgroundFacebook);
+  } else if (twitter) {
+    customStyle.push(styles.backgroundTwitter);
   } else if (danger) {
     customStyle.push(styles.backgroundDanger);
   }
 
   return (
     <TouchableOpacity style={customStyle} onPress={onPress}>
-      <Text style={styles.buttonTitle}>
-        {icon}
-        {icon?.title && ' '}
-        {title}
-      </Text>
+      {icon && <View style={styles.buttonIcon}>{icon}</View>}
+      <Text style={styles.buttonTitle}>{title}</Text>
     </TouchableOpacity>
   );
 };

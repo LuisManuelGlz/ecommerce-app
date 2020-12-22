@@ -3,19 +3,37 @@ import { Colors } from '../../styles';
 
 export default StyleSheet.create({
   default: {
+    flexDirection: 'row',
     borderRadius: 50,
-    paddingHorizontal: 32,
-    paddingVertical: 16,
+    width: 300,
+    height: 50,
+    paddingHorizontal: 10,
+    alignItems: 'center',
+  },
+  buttonHasIcon: {
+    justifyContent: 'center',
   },
   backgroundPrimary: {
     backgroundColor: Colors.primary,
   },
+  backgroundGoogle: {
+    backgroundColor: Colors.google,
+  },
+  backgroundFacebook: {
+    backgroundColor: Colors.facebook,
+  },
+  backgroundTwitter: {
+    backgroundColor: Colors.twitter,
+  },
   backgroundDanger: {
     backgroundColor: Colors.danger,
   },
+  buttonIcon: {
+    marginRight: 25,
+    marginLeft: 10,
+  },
   buttonTitle: {
     color: Colors.light,
-    textAlign: 'center',
     fontSize: 16,
   },
   block: {

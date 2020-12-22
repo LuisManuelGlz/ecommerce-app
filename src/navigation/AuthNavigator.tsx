@@ -4,7 +4,6 @@ import IntroScreen from '../screens/Intro';
 import SignInScreen from '../screens/SignIn';
 import SignUpStepOneScreen from '../screens/SignUpStepOne';
 import SignUpStepTwoScreen from '../screens/SignUpStepTwo';
-import LinearGradient from 'react-native-linear-gradient';
 
 const AuthStack = createStackNavigator();
 
