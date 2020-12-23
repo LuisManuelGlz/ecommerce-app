@@ -6,11 +6,18 @@ import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../../styles';
 import styles from './SignUpStepTwoScreen.styles';
+import validation from './signUpStepTwoValidation';
 import { Text, Input, Button } from '../../components';
+
+type FormData = {
+  fullName: string;
+  address: string;
+  cardNumber: string;
+};
 
 const SignUpStepOneScreen = () => {
   const navigation = useNavigation();
-  const { control, handleSubmit, errors } = useForm();
+  const { control, handleSubmit, errors } = useForm<FormData>();
   const onSubmit = (data: any) => {
     console.log(data);
   };
@@ -45,13 +52,13 @@ const SignUpStepOneScreen = () => {
               />
             )}
             name="fullName"
-            rules={{ required: true }}
+            rules={validation.fullName}
             defaultValue=""
           />
           <View>
             {errors.fullName && (
               <Text size="h4" color="danger">
-                El correo electrónico es requerido.
+                {errors.fullName.message}
               </Text>
             )}
           </View>
@@ -80,13 +87,13 @@ const SignUpStepOneScreen = () => {
               />
             )}
             name="address"
-            rules={{ required: true }}
+            rules={validation.address}
             defaultValue=""
           />
           <View>
             {errors.address && (
-              <Text size="h6" color="danger">
-                La contraseña es requerida.
+              <Text size="h4" color="danger">
+                {errors.address.message}
               </Text>
             )}
           </View>
@@ -113,13 +120,13 @@ const SignUpStepOneScreen = () => {
               />
             )}
             name="cardNumber"
-            rules={{ required: true }}
+            rules={validation.cardNumber}
             defaultValue=""
           />
           <View>
             {errors.cardNumber && (
               <Text size="h4" color="danger">
-                La contraseña es requerida.
+                {errors.cardNumber.message}
               </Text>
             )}
           </View>
@@ -131,7 +138,7 @@ const SignUpStepOneScreen = () => {
           background="primary"
           block
           title="Regístrate con nosotros"
-          onPress={() => navigation.navigate('Home')}
+          onPress={handleSubmit(onSubmit)}
         />
       </View>
     </LinearGradient>

@@ -8,11 +8,17 @@ import auth from '@react-native-firebase/auth';
 import { Colors } from '../../styles';
 import { Text, Input, Button } from '../../components';
 import styles from './SignInScreen.styles';
+import validation from './signInValidation';
+
+type FormData = {
+  email: string;
+  password: string;
+};
 
 const SignInScreen = () => {
   const navigation = useNavigation();
 
-  const { control, handleSubmit, errors } = useForm();
+  const { control, handleSubmit, errors } = useForm<FormData>();
 
   const onSubmit = (data: any) => {
     auth()
@@ -21,13 +27,16 @@ const SignInScreen = () => {
         console.log('Signed in!');
       })
       .catch((error) => {
-        // if (error.code === 'auth/email-already-in-use') {
-        //   console.log('That email address is already in use!');
-        // }
-
-        // if (error.code === 'auth/invalid-email') {
-        //   console.log('That email address is invalid!');
-        // }
+        if (error.code === 'auth/invalid-email') {
+          console.log('El correo no es válido');
+        } else if (error.code === 'auth/user-disabled') {
+          console.log('El usuario ha sido deshabilitado');
+        } else if (
+          error.code === 'auth/user-not-found' ||
+          error.code === 'auth/wrong-password'
+        ) {
+          console.log('El correo o la contraseña son incorrectos');
+        }
 
         console.error(error);
       });
@@ -63,13 +72,13 @@ const SignInScreen = () => {
               />
             )}
             name="email"
-            rules={{ required: true }}
+            rules={validation.email}
             defaultValue=""
           />
           <View>
             {errors.email && (
               <Text size="h4" color="danger">
-                El correo electrónico es requerido.
+                {errors.email.message}
               </Text>
             )}
           </View>
@@ -95,13 +104,13 @@ const SignInScreen = () => {
               />
             )}
             name="password"
-            rules={{ required: true }}
+            rules={validation.password}
             defaultValue=""
           />
           <View>
             {errors.password && (
               <Text size="h4" color="danger">
-                La contraseña es requerida.
+                {errors.password.message}
               </Text>
             )}
           </View>

@@ -7,13 +7,20 @@ import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../../styles';
 import styles from './SignUpStepOneScreen.styles';
+import validation from './signUpStepOneValidation';
 import { Text, Input, SocialButton, Button } from '../../components';
+
+type FormData = {
+  email: string;
+  password: string;
+};
 
 const SignUpStepOneScreen = () => {
   const navigation = useNavigation();
-  const { control, handleSubmit, errors } = useForm();
+  const { control, handleSubmit, errors } = useForm<FormData>();
   const onSubmit = (data: any) => {
     console.log(data);
+    navigation.navigate('SignUpStepTwo');
   };
 
   return (
@@ -71,13 +78,13 @@ const SignUpStepOneScreen = () => {
               />
             )}
             name="email"
-            rules={{ required: true }}
+            rules={validation.email}
             defaultValue=""
           />
           <View>
             {errors.email && (
               <Text size="h4" color="danger">
-                El correo electrónico es requerido.
+                {errors.email.message}
               </Text>
             )}
           </View>
@@ -100,13 +107,13 @@ const SignUpStepOneScreen = () => {
               />
             )}
             name="password"
-            rules={{ required: true }}
+            rules={validation.password}
             defaultValue=""
           />
           <View>
             {errors.password && (
               <Text size="h4" color="danger">
-                La contraseña es requerida.
+                {errors.password.message}
               </Text>
             )}
           </View>
@@ -143,7 +150,7 @@ const SignUpStepOneScreen = () => {
           background="primary"
           block
           title="Continuar"
-          onPress={() => navigation.navigate('SignUpStepTwo')}
+          onPress={handleSubmit(onSubmit)}
         />
       </View>
 

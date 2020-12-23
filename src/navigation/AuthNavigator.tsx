@@ -5,14 +5,37 @@ import SignInScreen from '../screens/SignIn';
 import SignUpStepOneScreen from '../screens/SignUpStepOne';
 import SignUpStepTwoScreen from '../screens/SignUpStepTwo';
 
-const AuthStack = createStackNavigator();
+export type AuthStackParamList = {
+  Intro: undefined;
+  SignIn: undefined;
+  SignUpStepOne: undefined;
+  SignUpStepTwo: { userDetails: { email: string; password: string } };
+};
+
+const AuthStack = createStackNavigator<AuthStackParamList>();
 
 const AuthNavigator = () => (
   <AuthStack.Navigator screenOptions={{ headerTransparent: true }}>
-    <AuthStack.Screen name="Intro" component={IntroScreen} options={{ headerShown: false }} />
-    <AuthStack.Screen name="SignIn" component={SignInScreen} options={{ headerShown: false }} />
-    <AuthStack.Screen name="SignUpStepOne" component={SignUpStepOneScreen} options={{ headerShown: false }} />
-    <AuthStack.Screen name="SignUpStepTwo" component={SignUpStepTwoScreen} options={{ title: '' }} />
+    <AuthStack.Screen
+      name="Intro"
+      component={IntroScreen}
+      options={{ headerShown: false }}
+    />
+    <AuthStack.Screen
+      name="SignIn"
+      component={SignInScreen}
+      options={{ headerShown: false }}
+    />
+    <AuthStack.Screen
+      name="SignUpStepOne"
+      component={SignUpStepOneScreen}
+      options={{ headerShown: false }}
+    />
+    <AuthStack.Screen
+      name="SignUpStepTwo"
+      component={SignUpStepTwoScreen}
+      options={{ title: '' }}
+    />
   </AuthStack.Navigator>
 );
 
