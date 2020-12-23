@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { Controller, useForm } from 'react-hook-form';
-import { RouteProp, useNavigation } from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../../styles';
 import styles from './SignUpStepTwoScreen.styles';
 import validation from './signUpStepTwoValidation';
 import { Text, Input, Button } from '../../components';
-import { AuthStackParamList } from '../../navigation/AuthNavigator';
+import { AuthContext } from '../../context';
 
 type FormData = {
   fullName: string;
@@ -17,26 +17,21 @@ type FormData = {
   cardNumber: string;
 };
 
-interface Props {
-  route: RouteProp<AuthStackParamList, 'SignUpStepTwo'>;
-}
-
-const SignUpStepOneScreen = ({ route }: Props) => {
+const SignUpStepOneScreen = () => {
+  const { user, setIsAuthCompleted } = useContext(AuthContext);
   const { control, handleSubmit, errors, setValue } = useForm<FormData>();
 
   const onSubmit = (userDetails: FormData) => {
-    const { uid } = route.params.userAccount;
-
     firestore()
-      .collection('Users')
-      .doc(uid)
+      .collection('users')
+      .doc(user?.uid)
       .set({
         ...userDetails,
         avatar:
           'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y',
       })
       .then(() => {
-        console.log('User added!');
+        setIsAuthCompleted(true);
       })
       .catch((error) => {
         console.log(error);
@@ -181,6 +176,17 @@ const SignUpStepOneScreen = ({ route }: Props) => {
           block
           title="Regístrate con nosotros"
           onPress={handleSubmit(onSubmit)}
+        />
+        <Button
+          style={styles.returnButton}
+          title="Regresar"
+          onPress={() => {
+            auth()
+              .signOut()
+              .then(() => {
+                setIsAuthCompleted(false);
+              });
+          }}
         />
       </View>
     </LinearGradient>

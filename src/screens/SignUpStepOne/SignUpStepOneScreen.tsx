@@ -18,16 +18,12 @@ type FormData = {
 
 const SignUpStepOneScreen = () => {
   const navigation = useNavigation();
-
   const { control, handleSubmit, errors, setValue } = useForm<FormData>();
 
   const onSubmit = ({ email, password }: FormData) => {
     auth()
       .createUserWithEmailAndPassword(email, password)
-      .then(({ user: { uid } }) => {
-        navigation.navigate('SignUpStepTwo', {
-          userAccount: { uid, email, password },
-        });
+      .then(() => {
       })
       .catch((error) => {
         if (error.code === 'auth/email-already-in-use') {

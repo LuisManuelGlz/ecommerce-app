@@ -19,6 +19,10 @@ export default StyleSheet.create({
     marginVertical: 5,
   },
   buttonsContainer: {
+    alignItems: 'center',
     flexGrow: 1
+  },
+  returnButton: {
+    marginTop: 10,
   },
 });
