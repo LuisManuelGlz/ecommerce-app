@@ -9,7 +9,9 @@ export type AuthStackParamList = {
   Intro: undefined;
   SignIn: undefined;
   SignUpStepOne: undefined;
-  SignUpStepTwo: { userDetails: { email: string; password: string } };
+  SignUpStepTwo: {
+    userAccount: { uid: string; email: string; password: string };
+  };
 };
 
 const AuthStack = createStackNavigator<AuthStackParamList>();

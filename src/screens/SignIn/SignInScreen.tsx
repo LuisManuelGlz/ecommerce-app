@@ -18,11 +18,11 @@ type FormData = {
 const SignInScreen = () => {
   const navigation = useNavigation();
 
-  const { control, handleSubmit, errors } = useForm<FormData>();
+  const { control, handleSubmit, errors, setValue } = useForm<FormData>();
 
-  const onSubmit = (data: any) => {
+  const onSubmit = ({ email, password }: FormData) => {
     auth()
-      .signInWithEmailAndPassword(data.email, data.password)
+      .signInWithEmailAndPassword(email, password)
       .then(() => {
         console.log('Signed in!');
       })
@@ -56,7 +56,10 @@ const SignInScreen = () => {
         <View style={styles.fieldContainer}>
           <Text size="h5">Correo</Text>
           <Controller
+            name="email"
+            rules={validation.email}
             control={control}
+            defaultValue=""
             render={({ onChange, onBlur, value }) => (
               <Input
                 onBlur={onBlur}
@@ -64,16 +67,20 @@ const SignInScreen = () => {
                 onChangeText={(value: string) => onChange(value)}
                 value={value}
                 iconRight={
-                  <Ionicons name="close" size={24} color={Colors.duality} />
+                  value !== '' && (
+                    <Ionicons
+                      onPress={() => setValue('email', '')}
+                      name="close"
+                      size={24}
+                      color={Colors.duality}
+                    />
+                  )
                 }
                 iconOutside={
                   <Ionicons name="mail" size={24} color={Colors.light} />
                 }
               />
             )}
-            name="email"
-            rules={validation.email}
-            defaultValue=""
           />
           <View>
             {errors.email && (
@@ -87,7 +94,10 @@ const SignInScreen = () => {
         <View style={styles.fieldContainer}>
           <Text size="h5">Contraseña</Text>
           <Controller
+            name="password"
+            rules={validation.password}
             control={control}
+            defaultValue=""
             render={({ onChange, onBlur, value }) => (
               <Input
                 onBlur={onBlur}
@@ -96,16 +106,20 @@ const SignInScreen = () => {
                 onChangeText={(value: string) => onChange(value)}
                 value={value}
                 iconRight={
-                  <Ionicons name="close" size={24} color={Colors.duality} />
+                  value !== '' && (
+                    <Ionicons
+                      onPress={() => setValue('password', '')}
+                      name="close"
+                      size={24}
+                      color={Colors.duality}
+                    />
+                  )
                 }
                 iconOutside={
                   <Ionicons name="lock-closed" size={24} color={Colors.light} />
                 }
               />
             )}
-            name="password"
-            rules={validation.password}
-            defaultValue=""
           />
           <View>
             {errors.password && (

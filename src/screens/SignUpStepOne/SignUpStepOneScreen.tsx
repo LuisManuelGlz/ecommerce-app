@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
+import auth from '@react-native-firebase/auth';
 import LinearGradient from 'react-native-linear-gradient';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
@@ -17,10 +18,26 @@ type FormData = {
 
 const SignUpStepOneScreen = () => {
   const navigation = useNavigation();
-  const { control, handleSubmit, errors } = useForm<FormData>();
-  const onSubmit = (data: any) => {
-    console.log(data);
-    navigation.navigate('SignUpStepTwo');
+
+  const { control, handleSubmit, errors, setValue } = useForm<FormData>();
+
+  const onSubmit = ({ email, password }: FormData) => {
+    auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(({ user: { uid } }) => {
+        navigation.navigate('SignUpStepTwo', {
+          userAccount: { uid, email, password },
+        });
+      })
+      .catch((error) => {
+        if (error.code === 'auth/email-already-in-use') {
+          console.log('El correo ya está en uso');
+        } else if (error.code === 'auth/invalid-email') {
+          console.log('El correo no es válido');
+        }
+
+        console.error(error);
+      });
   };
 
   return (
@@ -73,7 +90,14 @@ const SignUpStepOneScreen = () => {
                 onChangeText={(value: string) => onChange(value)}
                 value={value}
                 iconRight={
-                  <Ionicons name="close" size={24} color={Colors.duality} />
+                  value !== '' && (
+                    <Ionicons
+                      onPress={() => setValue('email', '')}
+                      name="close"
+                      size={24}
+                      color={Colors.duality}
+                    />
+                  )
                 }
               />
             )}
@@ -102,7 +126,14 @@ const SignUpStepOneScreen = () => {
                 onChangeText={(value: string) => onChange(value)}
                 value={value}
                 iconRight={
-                  <Ionicons name="close" size={24} color={Colors.duality} />
+                  value !== '' && (
+                    <Ionicons
+                      onPress={() => setValue('password', '')}
+                      name="close"
+                      size={24}
+                      color={Colors.duality}
+                    />
+                  )
                 }
               />
             )}

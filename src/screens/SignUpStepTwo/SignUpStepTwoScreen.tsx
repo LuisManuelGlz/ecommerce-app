@@ -2,12 +2,14 @@ import React from 'react';
 import { View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { Controller, useForm } from 'react-hook-form';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation } from '@react-navigation/native';
+import firestore from '@react-native-firebase/firestore';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../../styles';
 import styles from './SignUpStepTwoScreen.styles';
 import validation from './signUpStepTwoValidation';
 import { Text, Input, Button } from '../../components';
+import { AuthStackParamList } from '../../navigation/AuthNavigator';
 
 type FormData = {
   fullName: string;
@@ -15,11 +17,30 @@ type FormData = {
   cardNumber: string;
 };
 
-const SignUpStepOneScreen = () => {
-  const navigation = useNavigation();
-  const { control, handleSubmit, errors } = useForm<FormData>();
-  const onSubmit = (data: any) => {
-    console.log(data);
+interface Props {
+  route: RouteProp<AuthStackParamList, 'SignUpStepTwo'>;
+}
+
+const SignUpStepOneScreen = ({ route }: Props) => {
+  const { control, handleSubmit, errors, setValue } = useForm<FormData>();
+
+  const onSubmit = (userDetails: FormData) => {
+    const { uid } = route.params.userAccount;
+
+    firestore()
+      .collection('Users')
+      .doc(uid)
+      .set({
+        ...userDetails,
+        avatar:
+          'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y',
+      })
+      .then(() => {
+        console.log('User added!');
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -44,7 +65,14 @@ const SignUpStepOneScreen = () => {
                 onChangeText={(value: string) => onChange(value)}
                 value={value}
                 iconRight={
-                  <Ionicons name="close" size={24} color={Colors.duality} />
+                  value !== '' && (
+                    <Ionicons
+                      onPress={() => setValue('fullName', '')}
+                      name="close"
+                      size={24}
+                      color={Colors.duality}
+                    />
+                  )
                 }
                 iconOutside={
                   <Ionicons name="person" size={24} color={Colors.light} />
@@ -75,7 +103,14 @@ const SignUpStepOneScreen = () => {
                 onChangeText={(value: string) => onChange(value)}
                 value={value}
                 iconRight={
-                  <Ionicons name="close" size={24} color={Colors.duality} />
+                  value !== '' && (
+                    <Ionicons
+                      onPress={() => setValue('address', '')}
+                      name="close"
+                      size={24}
+                      color={Colors.duality}
+                    />
+                  )
                 }
                 iconOutside={
                   <Ionicons
@@ -112,7 +147,14 @@ const SignUpStepOneScreen = () => {
                 onChangeText={(value: string) => onChange(value)}
                 value={value}
                 iconRight={
-                  <Ionicons name="close" size={24} color={Colors.duality} />
+                  value !== '' && (
+                    <Ionicons
+                      onPress={() => setValue('cardNumber', '')}
+                      name="close"
+                      size={24}
+                      color={Colors.duality}
+                    />
+                  )
                 }
                 iconOutside={
                   <Ionicons name="card" size={24} color={Colors.light} />
