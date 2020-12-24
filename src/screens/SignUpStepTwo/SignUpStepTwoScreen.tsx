@@ -17,8 +17,8 @@ type FormData = {
   cardNumber: string;
 };
 
-const SignUpStepOneScreen = () => {
-  const { user } = useContext(AuthContext);
+const SignUpStepTwoScreen = () => {
+  const { user, setIsAuthCompleted } = useContext(AuthContext);
   const { control, handleSubmit, errors, setValue } = useForm<FormData>();
 
   const onSubmit = (userDetails: FormData) => {
@@ -29,6 +29,9 @@ const SignUpStepOneScreen = () => {
         ...userDetails,
         avatar:
           'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y',
+      })
+      .then(() => {
+        setIsAuthCompleted(true);
       })
       .catch((error) => {
         console.log(error);
@@ -186,4 +189,4 @@ const SignUpStepOneScreen = () => {
   );
 };
 
-export default SignUpStepOneScreen;
+export default SignUpStepTwoScreen;

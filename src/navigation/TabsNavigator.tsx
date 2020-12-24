@@ -13,7 +13,7 @@ const TabsNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
+        tabBarIcon: ({ focused, color }) => {
           let iconName!: string;
 
           if (route.name === 'Home') {
@@ -26,7 +26,7 @@ const TabsNavigator = () => {
             iconName = focused ? 'person-circle' : 'person-circle-outline';
           }
 
-          return <Ionicons name={iconName} size={size} color={color} />;
+          return <Ionicons name={iconName} size={30} color={color} />;
         },
       })}
       tabBarOptions={{
@@ -34,6 +34,7 @@ const TabsNavigator = () => {
         inactiveTintColor: Colors.light,
         tabStyle: { backgroundColor: Colors.darkLighten },
         showLabel: false,
+        style: { height: 84 }
       }}>
       <Tab.Screen name="Home" component={HomeNavigator} />
       <Tab.Screen name="Search" component={SearchNavigator} />

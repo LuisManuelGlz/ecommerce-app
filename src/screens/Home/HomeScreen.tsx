@@ -5,11 +5,6 @@ import { Button, View } from 'react-native';
 const HomeScreen = () => {
   return (
     <View>
-      <Button
-        title="Sign Out"
-        onPress={() => {
-          auth().signOut();
-        }}></Button>
     </View>
   );
 };

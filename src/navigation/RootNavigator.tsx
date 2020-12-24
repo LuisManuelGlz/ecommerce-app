@@ -45,7 +45,7 @@ const RootNavigator = () => {
 
   return (
     <AuthContext.Provider
-      value={{ user }}>
+      value={{ user, setIsAuthCompleted }}>
       <RootStack.Navigator>
         {isAuthCompleted ? (
           <RootStack.Screen
