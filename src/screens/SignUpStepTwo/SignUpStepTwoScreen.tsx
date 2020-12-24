@@ -18,7 +18,7 @@ type FormData = {
 };
 
 const SignUpStepOneScreen = () => {
-  const { user, setIsAuthCompleted } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const { control, handleSubmit, errors, setValue } = useForm<FormData>();
 
   const onSubmit = (userDetails: FormData) => {
@@ -29,9 +29,6 @@ const SignUpStepOneScreen = () => {
         ...userDetails,
         avatar:
           'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y',
-      })
-      .then(() => {
-        setIsAuthCompleted(true);
       })
       .catch((error) => {
         console.log(error);
@@ -181,11 +178,7 @@ const SignUpStepOneScreen = () => {
           style={styles.returnButton}
           title="Regresar"
           onPress={() => {
-            auth()
-              .signOut()
-              .then(() => {
-                setIsAuthCompleted(false);
-              });
+            auth().signOut();
           }}
         />
       </View>

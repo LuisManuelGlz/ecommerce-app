@@ -10,15 +10,30 @@ const RootStack = createStackNavigator();
 
 const RootNavigator = () => {
   // Set an initializing state whilst Firebase connects
-  const [initializing, setInitializing] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
   const [isAuthCompleted, setIsAuthCompleted] = useState(false);
 
   // Handle user state changes
-  const onAuthStateChanged = (user: FirebaseAuthTypes.User | null) => {
+  const onAuthStateChanged = async (user: FirebaseAuthTypes.User | null) => {
+    setIsLoading(true);
     setUser(user);
-    user && verifyIfSignUpIsComplete();
-    if (initializing) setInitializing(false);
+    if (user) {
+      await getUserInfo(user).then((documentSnapshot) => {
+        if (documentSnapshot.exists) {
+          setIsAuthCompleted(true);
+        } else {
+          setIsAuthCompleted(false);
+        }
+      });
+    } else {
+      setIsAuthCompleted(false);
+    }
+    setIsLoading(false);
+  };
+  
+  const getUserInfo = (user: FirebaseAuthTypes.User) => {
+    return firestore().collection('users').doc(user.uid).get();
   };
 
   useEffect(() => {
@@ -26,23 +41,11 @@ const RootNavigator = () => {
     return subscriber; // unsubscribe on unmount
   }, []);
 
-  const verifyIfSignUpIsComplete = () => {
-    firestore()
-      .collection('users')
-      .doc(user?.uid)
-      .get()
-      .then((documentSnapshot) => {
-        if (documentSnapshot.exists) {
-          setIsAuthCompleted(true);
-        }
-      });
-  };
-
-  if (initializing) return null;
+  if (isLoading) return null;
 
   return (
     <AuthContext.Provider
-      value={{ user, isAuthCompleted, setIsAuthCompleted, initializing }}>
+      value={{ user }}>
       <RootStack.Navigator>
         {isAuthCompleted ? (
           <RootStack.Screen

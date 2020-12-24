@@ -23,8 +23,6 @@ const SignUpStepOneScreen = () => {
   const onSubmit = ({ email, password }: FormData) => {
     auth()
       .createUserWithEmailAndPassword(email, password)
-      .then(() => {
-      })
       .catch((error) => {
         if (error.code === 'auth/email-already-in-use') {
           console.log('El correo ya está en uso');

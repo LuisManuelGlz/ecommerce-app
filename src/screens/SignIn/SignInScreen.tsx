@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -9,7 +9,6 @@ import { Colors } from '../../styles';
 import { Text, Input, Button } from '../../components';
 import styles from './SignInScreen.styles';
 import validation from './signInValidation';
-import { AuthContext } from '../../context';
 
 type FormData = {
   email: string;
@@ -18,15 +17,11 @@ type FormData = {
 
 const SignInScreen = () => {
   const navigation = useNavigation();
-  const { setIsAuthCompleted } = useContext(AuthContext)
   const { control, handleSubmit, errors, setValue } = useForm<FormData>();
 
   const onSubmit = ({ email, password }: FormData) => {
     auth()
       .signInWithEmailAndPassword(email, password)
-      .then(() => {
-        setIsAuthCompleted(true);
-      })
       .catch((error) => {
         if (error.code === 'auth/invalid-email') {
           console.log('El correo no es válido');
