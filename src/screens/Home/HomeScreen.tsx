@@ -1,6 +1,5 @@
 import React from 'react';
-import auth from '@react-native-firebase/auth';
-import { Button, View } from 'react-native';
+import { View } from 'react-native';
 
 const HomeScreen = () => {
   return (

@@ -1,18 +1,32 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { View } from 'react-native';
+import React, { Fragment, useContext, useEffect, useState } from 'react';
+import { ScrollView, Dimensions } from 'react-native';
+import {
+  TabView,
+  SceneMap,
+  TabBar,
+  SceneRendererProps,
+  NavigationState,
+} from 'react-native-tab-view';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { IUserInfo } from '../../interfaces/userInfo';
-import { AccountOption, Text, UserInfo } from '../../components';
+import { AccountOption, HistoryOrder, Text, UserInfo } from '../../components';
 import { AuthContext } from '../../context';
 import styles from './ProfileScreen.styles';
 import { Colors } from '../../styles';
+
+const initialLayout = { width: Dimensions.get('window').width };
 
 const ProfileScreen = () => {
   const { user } = useContext(AuthContext);
   const [userInfo, setUserInfo] = useState<IUserInfo>();
   const [isLoading, setIsLoading] = useState(true);
+  const [index, setIndex] = useState(0);
+  const [routes] = useState([
+    { key: 'account', title: 'Cuenta' },
+    { key: 'history', title: 'Historial' },
+  ]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -32,10 +46,9 @@ const ProfileScreen = () => {
 
   if (isLoading) return null;
 
-  return (
-    <View style={styles.container}>
-      <UserInfo style={styles.userInfo} userInfo={userInfo!} />
-      <View style={styles.accountOptionContainer}>
+  const AccountRoute = () => {
+    return (
+      <ScrollView style={[styles.scene, styles.accountOptionContainer]}>
         <AccountOption
           style={styles.accountOption}
           title="Cuenta de banco"
@@ -90,8 +103,65 @@ const ProfileScreen = () => {
             auth().signOut();
           }}
         />
-      </View>
-    </View>
+      </ScrollView>
+    );
+  };
+
+  const HistoryRoute = () => {
+    return (
+      <ScrollView style={[styles.scene, styles.historyOrderContainer]}>
+        <Text style={styles.noOrdersYet} size="h2">No hay órdenes aún</Text>
+        {/* <HistoryOrder style={styles.historyOrder} orderNumber="1" />
+        <HistoryOrder style={styles.historyOrder} orderNumber="1" />
+        <HistoryOrder style={styles.historyOrder} orderNumber="1" />
+        <HistoryOrder style={styles.historyOrder} orderNumber="1" />
+        <HistoryOrder style={styles.historyOrder} orderNumber="1" />
+        <HistoryOrder style={styles.historyOrder} orderNumber="1" />
+        <HistoryOrder style={styles.historyOrder} orderNumber="1" />
+        <HistoryOrder style={styles.historyOrder} orderNumber="1" />
+        <HistoryOrder style={styles.historyOrder} orderNumber="10" /> */}
+      </ScrollView>
+    );
+  };
+
+  const renderScene = SceneMap({
+    account: AccountRoute,
+    history: HistoryRoute,
+  });
+
+  const renderTabBar = (
+    props: SceneRendererProps & {
+      navigationState: NavigationState<{
+        key: string;
+        title: string;
+      }>;
+    },
+  ) => (
+    <TabBar
+      {...props}
+      renderLabel={({ route, color }) => (
+        <Text size="h3" style={{ color, margin: 8 }}>
+          {route.title}
+        </Text>
+      )}
+      activeColor={Colors.primary}
+      inactiveColor={Colors.light}
+      indicatorStyle={styles.tabBarIndicator}
+      style={styles.tabBar}
+    />
+  );
+
+  return (
+    <Fragment>
+      <UserInfo userInfo={userInfo!} />
+      <TabView
+        renderTabBar={renderTabBar}
+        navigationState={{ index, routes }}
+        renderScene={renderScene}
+        onIndexChange={setIndex}
+        initialLayout={initialLayout}
+      />
+    </Fragment>
   );
 };
 

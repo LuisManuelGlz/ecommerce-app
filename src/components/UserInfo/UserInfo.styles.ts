@@ -2,23 +2,21 @@ import { StyleSheet } from 'react-native';
 import { Colors } from '../../styles';
 
 export default StyleSheet.create({
-  container: {
-    // flex: 1,
-    backgroundColor: 'red',
-  },
   fullName: {
+    marginTop: 40,
     textAlign: 'center',
-  },
-  avatar: {
-    width: 60,
-    height: 60,
-    borderColor: Colors.primary,
-    borderWidth: 3,
-    borderRadius: 100,
   },
   userInfoContainer: {
     flexDirection: 'row',
+    marginVertical: 15,
     paddingLeft: 30,
+  },
+  avatar: {
+    width: 80,
+    height: 80,
+    borderColor: Colors.primary,
+    borderWidth: 3,
+    borderRadius: 100,
   },
   followingContainer: {
     marginLeft: 20,

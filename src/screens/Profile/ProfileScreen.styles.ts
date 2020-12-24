@@ -1,18 +1,35 @@
 import { StyleSheet } from 'react-native';
+import { Colors } from '../../styles';
 
 export default StyleSheet.create({
-  container: {
-    paddingVertical: 30,
+  scene: {
+    flex: 1,
   },
-  userInfo: {
+  tabBar: {
+    backgroundColor: Colors.darkLighten,
+    height: 60,
+  },
+  tabBarIndicator: {
+    backgroundColor: Colors.primary,
+    height: 4,
   },
   accountOptionContainer: {
     paddingHorizontal: 27,
   },
   accountOption: {
-    marginTop: 15,
+    marginVertical: 10,
   },
   accountOptionSignOut: {
-    marginTop: 45,
+    marginVertical: 40,
+  },
+  historyOrderContainer: {
+    paddingHorizontal: 28,
+  },
+  historyOrder: {
+    marginVertical: 10,
+  },
+  noOrdersYet: {
+    marginTop: 20,
+    textAlign: 'center',
   },
 });

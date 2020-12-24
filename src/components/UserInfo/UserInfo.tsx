@@ -11,11 +11,11 @@ interface Props {
 
 const UserInfo = ({ style, userInfo }: Props) => {
   return (
-    <View style={styles.container}>
+    <View style={style}>
       <Text size="h2" style={styles.fullName}>
         {userInfo.fullName}
       </Text>
-      <View style={[styles.userInfoContainer, style]}>
+      <View style={styles.userInfoContainer}>
         <Image style={styles.avatar} source={{ uri: userInfo.avatar }} />
         <View style={styles.followingContainer}>
           <Text size="h3" style={styles.followingCount}>
