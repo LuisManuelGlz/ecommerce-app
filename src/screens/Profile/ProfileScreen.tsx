@@ -8,13 +8,12 @@ import {
   NavigationState,
 } from 'react-native-tab-view';
 import firestore from '@react-native-firebase/firestore';
-import auth from '@react-native-firebase/auth';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import { IUserInfo } from '../../interfaces/userInfo';
-import { AccountOption, HistoryOrder, Text, UserInfo } from '../../components';
+import { Text, UserInfo } from '../../components';
 import { AuthContext } from '../../context';
 import styles from './ProfileScreen.styles';
 import { Colors } from '../../styles';
+import { AccountRoute, HistoryRoute } from './TabBarRoutes';
 
 const initialLayout = { width: Dimensions.get('window').width };
 
@@ -22,6 +21,8 @@ const ProfileScreen = () => {
   const { user } = useContext(AuthContext);
   const [userInfo, setUserInfo] = useState<IUserInfo>();
   const [isLoading, setIsLoading] = useState(true);
+
+  // index for TabView
   const [index, setIndex] = useState(0);
   const [routes] = useState([
     { key: 'account', title: 'Cuenta' },
@@ -44,89 +45,11 @@ const ProfileScreen = () => {
       });
   }, []);
 
-  if (isLoading) return null;
-
-  const AccountRoute = () => {
-    return (
-      <ScrollView style={[styles.scene, styles.accountOptionContainer]}>
-        <AccountOption
-          style={styles.accountOption}
-          title="Cuenta de banco"
-          iconLeft={<Ionicons name="card" size={25} color={Colors.light} />}
-          iconRight={
-            <Ionicons name="chevron-forward" size={30} color={Colors.light} />
-          }
-        />
-        <AccountOption
-          style={styles.accountOption}
-          title="Notificaciones"
-          iconLeft={
-            <Ionicons name="notifications" size={25} color={Colors.light} />
-          }
-          iconRight={
-            <Ionicons name="chevron-forward" size={30} color={Colors.light} />
-          }
-        />
-        <AccountOption
-          style={styles.accountOption}
-          title="Cambiar dirección"
-          iconLeft={
-            <Ionicons name="location-sharp" size={25} color={Colors.light} />
-          }
-          iconRight={
-            <Ionicons name="chevron-forward" size={30} color={Colors.light} />
-          }
-        />
-        <AccountOption
-          style={styles.accountOption}
-          title="Cambiar correo"
-          iconLeft={<Ionicons name="mail" size={25} color={Colors.light} />}
-          iconRight={
-            <Ionicons name="chevron-forward" size={30} color={Colors.light} />
-          }
-        />
-        <AccountOption
-          style={styles.accountOption}
-          title="Cambiar contraseña"
-          iconLeft={
-            <Ionicons name="lock-closed" size={25} color={Colors.light} />
-          }
-          iconRight={
-            <Ionicons name="chevron-forward" size={30} color={Colors.light} />
-          }
-        />
-        <AccountOption
-          style={styles.accountOptionSignOut}
-          title="Cerrar sesión"
-          iconLeft={<Ionicons name="log-out" size={25} color={Colors.light} />}
-          onPress={() => {
-            auth().signOut();
-          }}
-        />
-      </ScrollView>
-    );
-  };
-
-  const HistoryRoute = () => {
-    return (
-      <ScrollView style={[styles.scene, styles.historyOrderContainer]}>
-        <Text style={styles.noOrdersYet} size="h2">No hay órdenes aún</Text>
-        {/* <HistoryOrder style={styles.historyOrder} orderNumber="1" />
-        <HistoryOrder style={styles.historyOrder} orderNumber="1" />
-        <HistoryOrder style={styles.historyOrder} orderNumber="1" />
-        <HistoryOrder style={styles.historyOrder} orderNumber="1" />
-        <HistoryOrder style={styles.historyOrder} orderNumber="1" />
-        <HistoryOrder style={styles.historyOrder} orderNumber="1" />
-        <HistoryOrder style={styles.historyOrder} orderNumber="1" />
-        <HistoryOrder style={styles.historyOrder} orderNumber="1" />
-        <HistoryOrder style={styles.historyOrder} orderNumber="10" /> */}
-      </ScrollView>
-    );
-  };
-
+  // TabView scenes
   const renderScene = SceneMap({
     account: AccountRoute,
     history: HistoryRoute,
+    // history: () => <HistoryRoute orders={[{ id: '123', ... }]} />,
   });
 
   const renderTabBar = (
@@ -150,6 +73,8 @@ const ProfileScreen = () => {
       style={styles.tabBar}
     />
   );
+
+  if (isLoading) return null;
 
   return (
     <Fragment>
