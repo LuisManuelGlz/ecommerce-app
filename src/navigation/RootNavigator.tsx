@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-import TabsNavigator from './TabsNavigator';
 import AuthNavigator from './AuthNavigator';
 import { AuthContext } from '../context';
+import MainNavigator from './MainNavigator';
 
 const RootStack = createStackNavigator();
 
@@ -31,7 +31,7 @@ const RootNavigator = () => {
     }
     setIsLoading(false);
   };
-  
+
   const getUserInfo = (user: FirebaseAuthTypes.User) => {
     return firestore().collection('users').doc(user.uid).get();
   };
@@ -44,21 +44,12 @@ const RootNavigator = () => {
   if (isLoading) return null;
 
   return (
-    <AuthContext.Provider
-      value={{ user, setIsAuthCompleted }}>
-      <RootStack.Navigator>
+    <AuthContext.Provider value={{ user, setIsAuthCompleted }}>
+      <RootStack.Navigator screenOptions={{ headerShown: false }}>
         {isAuthCompleted ? (
-          <RootStack.Screen
-            name="Main"
-            component={TabsNavigator}
-            options={{ headerShown: false }}
-          />
+          <RootStack.Screen name="Main" component={MainNavigator} />
         ) : (
-          <RootStack.Screen
-            name="Auth"
-            component={AuthNavigator}
-            options={{ headerShown: false }}
-          />
+          <RootStack.Screen name="Auth" component={AuthNavigator} />
         )}
       </RootStack.Navigator>
     </AuthContext.Provider>

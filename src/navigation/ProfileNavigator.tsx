@@ -1,6 +1,13 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+} from '@react-navigation/stack';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import ProfileScreen from '../screens/Profile';
+import ChangeEmailScreen from '../screens/ChangeEmail';
+import ChangePasswordScreen from '../screens/ChangePassword';
+import { Colors, Font } from '../styles';
 
 const ProfileStack = createStackNavigator();
 

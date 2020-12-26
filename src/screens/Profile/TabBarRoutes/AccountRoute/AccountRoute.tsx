@@ -1,12 +1,15 @@
-import React from "react";
-import { ScrollView } from "react-native";
+import React from 'react';
+import { ScrollView } from 'react-native';
 import auth from '@react-native-firebase/auth';
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { AccountOption } from "../../../../components";
-import { Colors } from "../../../../styles";
+import { useNavigation } from '@react-navigation/native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { AccountOption } from '../../../../components';
+import { Colors } from '../../../../styles';
 import styles from './AccountRoute.styles';
 
 const AccountRoute = () => {
+  const navigation = useNavigation();
+
   return (
     <ScrollView style={[styles.scene, styles.accountOptionContainer]}>
       <AccountOption
@@ -44,6 +47,7 @@ const AccountRoute = () => {
         iconRight={
           <Ionicons name="chevron-forward" size={30} color={Colors.light} />
         }
+        onPress={() => navigation.navigate('ChangeEmail')}
       />
       <AccountOption
         style={styles.accountOption}
