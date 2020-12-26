@@ -1,5 +1,5 @@
-import React from 'react';
-import { View } from 'react-native';
+import React, { createRef } from 'react';
+import { TextInput, View } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import { useHeaderHeight } from '@react-navigation/stack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -19,6 +19,7 @@ const ChangeEmailScreen = () => {
   const navigation = useNavigation();
   const { control, handleSubmit, errors, setValue } = useForm<FormData>();
 
+  const newEmailInput = createRef<TextInput>();
   
   const onSubmit = ({ newEmail }: FormData) => {
     const user = auth().currentUser;
@@ -44,6 +45,8 @@ const ChangeEmailScreen = () => {
           defaultValue=""
           render={({ onChange, onBlur, value }) => (
             <Input
+              ref={newEmailInput}
+              returnKeyType="done"
               style={styles.emailInput}
               onBlur={onBlur}
               onChangeText={(value: string) => onChange(value)}

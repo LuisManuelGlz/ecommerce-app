@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { View } from 'react-native';
+import React, { createRef, useContext } from 'react';
+import { TextInput, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { Controller, useForm } from 'react-hook-form';
 import firestore from '@react-native-firebase/firestore';
@@ -20,6 +20,10 @@ type FormData = {
 const SignUpStepTwoScreen = () => {
   const { user, setIsAuthCompleted } = useContext(AuthContext);
   const { control, handleSubmit, errors, setValue } = useForm<FormData>();
+
+  const fullNameInput = createRef<TextInput>();
+  const addressInput = createRef<TextInput>();
+  const cardNumberInput = createRef<TextInput>();
 
   const onSubmit = (userDetails: FormData) => {
     firestore()
@@ -55,6 +59,10 @@ const SignUpStepTwoScreen = () => {
             control={control}
             render={({ onChange, onBlur, value }) => (
               <Input
+                ref={fullNameInput}
+                returnKeyType="next"
+                onSubmitEditing={() => addressInput.current?.focus()}
+                blurOnSubmit={false}
                 onBlur={onBlur}
                 placeholder="Escribe tu nombre completo"
                 onChangeText={(value: string) => onChange(value)}
@@ -93,6 +101,10 @@ const SignUpStepTwoScreen = () => {
             control={control}
             render={({ onChange, onBlur, value }) => (
               <Input
+                ref={addressInput}
+                returnKeyType="next"
+                onSubmitEditing={() => cardNumberInput.current?.focus()}
+                blurOnSubmit={false}
                 onBlur={onBlur}
                 placeholder="Escribe tu dirección"
                 onChangeText={(value: string) => onChange(value)}
@@ -135,6 +147,8 @@ const SignUpStepTwoScreen = () => {
             control={control}
             render={({ onChange, onBlur, value }) => (
               <Input
+                ref={cardNumberInput}
+                returnKeyType="done"
                 onBlur={onBlur}
                 keyboardType="numeric"
                 maxLength={16}

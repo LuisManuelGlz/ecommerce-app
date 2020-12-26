@@ -1,5 +1,5 @@
-import React from 'react';
-import { View } from 'react-native';
+import React, { createRef } from 'react';
+import { View, TextInput } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
@@ -18,6 +18,9 @@ type FormData = {
 const SignInScreen = () => {
   const navigation = useNavigation();
   const { control, handleSubmit, errors, setValue } = useForm<FormData>();
+
+  const emailInput = createRef<TextInput>();
+  const passwordInput = createRef<TextInput>();
 
   const onSubmit = ({ email, password }: FormData) => {
     auth()
@@ -58,6 +61,10 @@ const SignInScreen = () => {
             defaultValue=""
             render={({ onChange, onBlur, value }) => (
               <Input
+                ref={emailInput}
+                returnKeyType="next"
+                onSubmitEditing={() => passwordInput.current?.focus()}
+                blurOnSubmit={false}
                 onBlur={onBlur}
                 placeholder="Escribe tu correo electrónico"
                 onChangeText={(value: string) => onChange(value)}
@@ -96,6 +103,8 @@ const SignInScreen = () => {
             defaultValue=""
             render={({ onChange, onBlur, value }) => (
               <Input
+                ref={passwordInput}
+                returnKeyType="done"
                 onBlur={onBlur}
                 secureTextEntry
                 placeholder="Escribe tu contraseña"

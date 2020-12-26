@@ -1,5 +1,5 @@
-import React from 'react';
-import { View } from 'react-native';
+import React, { createRef } from 'react';
+import { TextInput, View } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import auth from '@react-native-firebase/auth';
 import LinearGradient from 'react-native-linear-gradient';
@@ -19,6 +19,9 @@ type FormData = {
 const SignUpStepOneScreen = () => {
   const navigation = useNavigation();
   const { control, handleSubmit, errors, setValue } = useForm<FormData>();
+
+  const emailInput = createRef<TextInput>();
+  const passwordInput = createRef<TextInput>();
 
   const onSubmit = ({ email, password }: FormData) => {
     auth()
@@ -79,6 +82,10 @@ const SignUpStepOneScreen = () => {
             control={control}
             render={({ onChange, onBlur, value }) => (
               <Input
+                ref={emailInput}
+                returnKeyType="next"
+                onSubmitEditing={() => passwordInput.current?.focus()}
+                blurOnSubmit={false}
                 onBlur={onBlur}
                 placeholder="Escribe tu correo electrónico"
                 onChangeText={(value: string) => onChange(value)}
@@ -114,6 +121,8 @@ const SignUpStepOneScreen = () => {
             control={control}
             render={({ onChange, onBlur, value }) => (
               <Input
+                ref={passwordInput}
+                returnKeyType="done"
                 onBlur={onBlur}
                 secureTextEntry
                 placeholder="Escribe tu contraseña"

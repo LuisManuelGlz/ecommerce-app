@@ -1,5 +1,5 @@
-import React from 'react';
-import { View } from 'react-native';
+import React, { createRef } from 'react';
+import { TextInput, View } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import { useHeaderHeight } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
@@ -20,9 +20,10 @@ const ChangePasswordScreen = () => {
   const navigation = useNavigation();
   const { control, handleSubmit, errors, setValue } = useForm<FormData>();
 
-  const onSubmit = ({ currentPassword, newPassword }: FormData) => {
-    console.log(currentPassword, newPassword);
+  const currentPasswordInput = createRef<TextInput>();
+  const newPasswordInput = createRef<TextInput>();
 
+  const onSubmit = ({ currentPassword, newPassword }: FormData) => {
     const reauthenticate = (currentPassword: string) => {
       const user = auth().currentUser;
       const credential = auth.EmailAuthProvider.credential(
@@ -63,6 +64,10 @@ const ChangePasswordScreen = () => {
           defaultValue=""
           render={({ onChange, onBlur, value }) => (
             <Input
+              ref={currentPasswordInput}
+              returnKeyType="next"
+              onSubmitEditing={() => newPasswordInput.current?.focus()}
+              blurOnSubmit={false}
               style={styles.passwordInput}
               secureTextEntry
               onBlur={onBlur}
@@ -100,6 +105,8 @@ const ChangePasswordScreen = () => {
           defaultValue=""
           render={({ onChange, onBlur, value }) => (
             <Input
+              ref={newPasswordInput}
+              returnKeyType="done"
               style={styles.passwordInput}
               secureTextEntry
               onBlur={onBlur}
