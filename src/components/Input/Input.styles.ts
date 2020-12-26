@@ -22,6 +22,7 @@ export default StyleSheet.create({
   },
   input: {
     flexGrow: 1,
+    flexShrink: 1,
     color: Colors.light
   },
 });
