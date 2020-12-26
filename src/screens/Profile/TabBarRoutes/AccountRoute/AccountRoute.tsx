@@ -58,6 +58,7 @@ const AccountRoute = () => {
         iconRight={
           <Ionicons name="chevron-forward" size={30} color={Colors.light} />
         }
+        onPress={() => navigation.navigate('ChangePassword')}
       />
       <AccountOption
         style={styles.accountOptionSignOut}
