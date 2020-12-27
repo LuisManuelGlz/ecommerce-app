@@ -1,5 +1,5 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react';
-import { ScrollView, Dimensions } from 'react-native';
+import { Dimensions } from 'react-native';
 import {
   TabView,
   SceneMap,
@@ -78,7 +78,7 @@ const ProfileScreen = () => {
 
   return (
     <Fragment>
-      <UserInfo userInfo={userInfo!} />
+      <UserInfo />
       <TabView
         renderTabBar={renderTabBar}
         navigationState={{ index, routes }}

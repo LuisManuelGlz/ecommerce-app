@@ -1,6 +1,6 @@
 export interface IUserInfo {
-  fullName: string;
-  address: string;
-  avatar: string;
-  cardNumber: string;
+  displayName?: string | null;
+  photoURL?: string | null;
+  // address: string;
+  // cardNumber: string;
 }

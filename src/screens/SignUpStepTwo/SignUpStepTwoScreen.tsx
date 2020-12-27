@@ -26,6 +26,11 @@ const SignUpStepTwoScreen = () => {
   const cardNumberInput = createRef<TextInput>();
 
   const onSubmit = (userDetails: FormData) => {
+    auth().currentUser?.updateProfile({
+      displayName: userDetails.fullName,
+      photoURL:
+        'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y',
+    });
     firestore()
       .collection('users')
       .doc(user?.uid)
