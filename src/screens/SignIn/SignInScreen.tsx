@@ -5,6 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { Controller, useForm } from 'react-hook-form';
 import auth from '@react-native-firebase/auth';
+import { GoogleSignin } from '@react-native-community/google-signin';
 import { Colors } from '../../styles';
 import { Text, Input, Button } from '../../components';
 import styles from './SignInScreen.styles';
@@ -39,6 +40,17 @@ const SignInScreen = () => {
 
         console.error(error);
       });
+  };
+
+  const onGoogleButtonPress = async () => {
+    // Get the users ID token
+    const { idToken } = await GoogleSignin.signIn();
+
+    // Create a Google credential with the token
+    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+    // Sign-in the user with the credential
+    return auth().signInWithCredential(googleCredential);
   };
 
   return (
@@ -151,6 +163,7 @@ const SignInScreen = () => {
           block
           title="Iniciar sesión con Google"
           icon={<Ionicons name="logo-google" size={30} color={Colors.light} />}
+          onPress={() => onGoogleButtonPress()}
         />
 
         <Button

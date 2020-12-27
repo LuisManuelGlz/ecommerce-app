@@ -26,9 +26,11 @@ const SignUpStepTwoScreen = () => {
   const cardNumberInput = createRef<TextInput>();
 
   const onSubmit = async ({ fullName, address, cardNumber }: FormData) => {
-    await auth().currentUser?.updateProfile({
-      displayName: fullName,
+    const { currentUser } = auth();
+    await currentUser?.updateProfile({
+      displayName: currentUser.displayName || fullName,
       photoURL:
+        currentUser.photoURL ||
         'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y',
     });
 
