@@ -25,19 +25,19 @@ const SignUpStepTwoScreen = () => {
   const addressInput = createRef<TextInput>();
   const cardNumberInput = createRef<TextInput>();
 
-  const onSubmit = (userDetails: FormData) => {
-    auth().currentUser?.updateProfile({
-      displayName: userDetails.fullName,
+  const onSubmit = async ({ fullName, address, cardNumber }: FormData) => {
+    await auth().currentUser?.updateProfile({
+      displayName: fullName,
       photoURL:
         'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y',
     });
+
     firestore()
       .collection('users')
       .doc(user?.uid)
       .set({
-        ...userDetails,
-        avatar:
-          'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y',
+        address,
+        cardNumber,
       })
       .then(() => {
         setIsAuthCompleted(true);

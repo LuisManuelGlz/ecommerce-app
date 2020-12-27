@@ -5,8 +5,7 @@ import storage from '@react-native-firebase/storage';
 import { launchImageLibrary } from 'react-native-image-picker/src';
 import Text from '../Text';
 import styles from './UserInfo.styles';
-import { IUserInfo } from '../../interfaces/userInfo';
-import { Colors } from '../../styles';
+import { IUserInfo } from '../../interfaces/IUserInfo';
 
 interface Props {
   style?: StyleProp<ViewStyle>;

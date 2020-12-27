@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useEffect, useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Dimensions } from 'react-native';
 import {
   TabView,
@@ -7,10 +7,7 @@ import {
   SceneRendererProps,
   NavigationState,
 } from 'react-native-tab-view';
-import firestore from '@react-native-firebase/firestore';
-import { IUserInfo } from '../../interfaces/userInfo';
 import { Text, UserInfo } from '../../components';
-import { AuthContext } from '../../context';
 import styles from './ProfileScreen.styles';
 import { Colors } from '../../styles';
 import { AccountRoute, HistoryRoute } from './TabBarRoutes';
@@ -18,32 +15,12 @@ import { AccountRoute, HistoryRoute } from './TabBarRoutes';
 const initialLayout = { width: Dimensions.get('window').width };
 
 const ProfileScreen = () => {
-  const { user } = useContext(AuthContext);
-  const [userInfo, setUserInfo] = useState<IUserInfo>();
-  const [isLoading, setIsLoading] = useState(true);
-
   // index for TabView
   const [index, setIndex] = useState(0);
   const [routes] = useState([
     { key: 'account', title: 'Cuenta' },
     { key: 'history', title: 'Historial' },
   ]);
-
-  useEffect(() => {
-    setIsLoading(true);
-    firestore()
-      .collection('users')
-      .doc(user!.uid)
-      .get()
-      .then((documentSnapshot) => {
-        if (documentSnapshot.exists) {
-          setUserInfo(documentSnapshot.data() as IUserInfo);
-        }
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, []);
 
   // TabView scenes
   const renderScene = SceneMap({
@@ -73,8 +50,6 @@ const ProfileScreen = () => {
       style={styles.tabBar}
     />
   );
-
-  if (isLoading) return null;
 
   return (
     <Fragment>
