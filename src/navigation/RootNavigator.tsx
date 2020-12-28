@@ -1,31 +1,36 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import AuthNavigator from './AuthNavigator';
-import { AuthContext } from '../context';
+import { AuthContext } from '../context/AuthContext';
 import MainNavigator from './MainNavigator';
 
 const RootStack = createStackNavigator();
 
 const RootNavigator = () => {
+  const { setUser, isAuthCompleted, setIsAuthCompleted } = useContext(
+    AuthContext,
+  );
+
   // Set an initializing state whilst Firebase connects
   const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
-  const [isAuthCompleted, setIsAuthCompleted] = useState(false);
 
   // Handle user state changes
   const onAuthStateChanged = async (user: FirebaseAuthTypes.User | null) => {
     setIsLoading(true);
     setUser(user);
     if (user) {
-      await getUserInfo(user).then((documentSnapshot) => {
+      try {
+        const documentSnapshot = await getUserInfo(user);
         if (documentSnapshot.exists) {
           setIsAuthCompleted(true);
         } else {
           setIsAuthCompleted(false);
         }
-      });
+      } catch (error) {
+        console.log(error);
+      }
     } else {
       setIsAuthCompleted(false);
     }
@@ -44,15 +49,13 @@ const RootNavigator = () => {
   if (isLoading) return null;
 
   return (
-    <AuthContext.Provider value={{ user, setIsAuthCompleted }}>
-      <RootStack.Navigator screenOptions={{ headerShown: false }}>
-        {isAuthCompleted ? (
-          <RootStack.Screen name="Main" component={MainNavigator} />
-        ) : (
-          <RootStack.Screen name="Auth" component={AuthNavigator} />
-        )}
-      </RootStack.Navigator>
-    </AuthContext.Provider>
+    <RootStack.Navigator screenOptions={{ headerShown: false }}>
+      {isAuthCompleted ? (
+        <RootStack.Screen name="Main" component={MainNavigator} />
+      ) : (
+        <RootStack.Screen name="Auth" component={AuthNavigator} />
+      )}
+    </RootStack.Navigator>
   );
 };
 

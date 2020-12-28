@@ -9,7 +9,7 @@ import { Colors } from '../../styles';
 import styles from './SignUpStepTwoScreen.styles';
 import validation from './signUpStepTwoValidation';
 import { Text, Input, Button } from '../../components';
-import { AuthContext } from '../../context';
+import { AuthContext } from '../../context/AuthContext';
 
 type FormData = {
   fullName: string;
@@ -18,35 +18,15 @@ type FormData = {
 };
 
 const SignUpStepTwoScreen = () => {
-  const { user, setIsAuthCompleted } = useContext(AuthContext);
+  const { signUpPersonalDetails } = useContext(AuthContext);
   const { control, handleSubmit, errors, setValue } = useForm<FormData>();
 
   const fullNameInput = createRef<TextInput>();
   const addressInput = createRef<TextInput>();
   const cardNumberInput = createRef<TextInput>();
 
-  const onSubmit = async ({ fullName, address, cardNumber }: FormData) => {
-    const { currentUser } = auth();
-    await currentUser?.updateProfile({
-      displayName: currentUser.displayName || fullName,
-      photoURL:
-        currentUser.photoURL ||
-        'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y',
-    });
-
-    firestore()
-      .collection('users')
-      .doc(user?.uid)
-      .set({
-        address,
-        cardNumber,
-      })
-      .then(() => {
-        setIsAuthCompleted(true);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const onSubmit = (formData: FormData) => {
+    signUpPersonalDetails(formData);
   };
 
   return (

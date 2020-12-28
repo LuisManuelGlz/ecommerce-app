@@ -1,15 +1,14 @@
-import React, { createRef } from 'react';
+import React, { createRef, useContext } from 'react';
 import { View, TextInput } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { Controller, useForm } from 'react-hook-form';
-import auth from '@react-native-firebase/auth';
-import { GoogleSignin } from '@react-native-community/google-signin';
 import { Colors } from '../../styles';
 import { Text, Input, Button } from '../../components';
 import styles from './SignInScreen.styles';
 import validation from './signInValidation';
+import { AuthContext } from '../../context/AuthContext';
 
 type FormData = {
   email: string;
@@ -17,40 +16,15 @@ type FormData = {
 };
 
 const SignInScreen = () => {
+  const { signIn, googleSignIn } = useContext(AuthContext);
   const navigation = useNavigation();
   const { control, handleSubmit, errors, setValue } = useForm<FormData>();
 
   const emailInput = createRef<TextInput>();
   const passwordInput = createRef<TextInput>();
 
-  const onSubmit = ({ email, password }: FormData) => {
-    auth()
-      .signInWithEmailAndPassword(email, password)
-      .catch((error) => {
-        if (error.code === 'auth/invalid-email') {
-          console.log('El correo no es válido');
-        } else if (error.code === 'auth/user-disabled') {
-          console.log('El usuario ha sido deshabilitado');
-        } else if (
-          error.code === 'auth/user-not-found' ||
-          error.code === 'auth/wrong-password'
-        ) {
-          console.log('El correo o la contraseña son incorrectos');
-        }
-
-        console.error(error);
-      });
-  };
-
-  const onGoogleButtonPress = async () => {
-    // Get the users ID token
-    const { idToken } = await GoogleSignin.signIn();
-
-    // Create a Google credential with the token
-    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-
-    // Sign-in the user with the credential
-    return auth().signInWithCredential(googleCredential);
+  const onSubmit = (formData: FormData) => {
+    signIn(formData);
   };
 
   return (
@@ -163,7 +137,7 @@ const SignInScreen = () => {
           block
           title="Iniciar sesión con Google"
           icon={<Ionicons name="logo-google" size={30} color={Colors.light} />}
-          onPress={() => onGoogleButtonPress()}
+          onPress={() => googleSignIn()}
         />
 
         <Button

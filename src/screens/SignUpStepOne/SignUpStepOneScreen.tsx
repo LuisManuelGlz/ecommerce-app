@@ -1,4 +1,4 @@
-import React, { createRef } from 'react';
+import React, { createRef, useContext } from 'react';
 import { TextInput, View } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import auth from '@react-native-firebase/auth';
@@ -10,6 +10,7 @@ import { Colors } from '../../styles';
 import styles from './SignUpStepOneScreen.styles';
 import validation from './signUpStepOneValidation';
 import { Text, Input, SocialButton, Button } from '../../components';
+import { AuthContext } from '../../context/AuthContext';
 
 type FormData = {
   email: string;
@@ -17,24 +18,15 @@ type FormData = {
 };
 
 const SignUpStepOneScreen = () => {
+  const { signUpAccount, googleSignIn } = useContext(AuthContext)
   const navigation = useNavigation();
   const { control, handleSubmit, errors, setValue } = useForm<FormData>();
 
   const emailInput = createRef<TextInput>();
   const passwordInput = createRef<TextInput>();
 
-  const onSubmit = ({ email, password }: FormData) => {
-    auth()
-      .createUserWithEmailAndPassword(email, password)
-      .catch((error) => {
-        if (error.code === 'auth/email-already-in-use') {
-          console.log('El correo ya está en uso');
-        } else if (error.code === 'auth/invalid-email') {
-          console.log('El correo no es válido');
-        }
-
-        console.error(error);
-      });
+  const onSubmit = (formData: FormData) => {
+    signUpAccount(formData);
   };
 
   return (
@@ -51,6 +43,7 @@ const SignUpStepOneScreen = () => {
         <SocialButton
           background="google"
           icon={<Ionicons name="logo-google" size={50} color={Colors.light} />}
+          onPress={() => googleSignIn()}
         />
         <SocialButton
           background="facebook"
