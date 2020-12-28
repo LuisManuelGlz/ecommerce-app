@@ -16,7 +16,7 @@ type FormData = {
 };
 
 const SignInScreen = () => {
-  const { signIn, googleSignIn } = useContext(AuthContext);
+  const { signIn, googleSignIn, facebookSignIn } = useContext(AuthContext);
   const navigation = useNavigation();
   const { control, handleSubmit, errors, setValue } = useForm<FormData>();
 
@@ -148,6 +148,7 @@ const SignInScreen = () => {
           icon={
             <Ionicons name="logo-facebook" size={30} color={Colors.light} />
           }
+          onPress={() => facebookSignIn()}
         />
 
         <Button

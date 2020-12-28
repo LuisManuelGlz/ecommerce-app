@@ -4,11 +4,11 @@ import React, {
   useState,
   SetStateAction,
   Dispatch,
-  Fragment,
 } from 'react';
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { GoogleSignin } from '@react-native-community/google-signin';
+import { LoginManager, AccessToken } from 'react-native-fbsdk';
 import { IUserForSignIn } from '../interfaces/IUserForSignIn';
 import { IUserForSignUpAccount } from '../interfaces/IUserForSignUpAccount';
 import { IUserForSignUpPersonalDetails } from '../interfaces/IUserForSignUpPersonalDetails';
@@ -24,6 +24,7 @@ type AuthContextType = {
     userForSignUpPersonalDetails: IUserForSignUpPersonalDetails,
   ) => void;
   googleSignIn: () => void;
+  facebookSignIn: () => void;
   signOut: () => void;
 };
 
@@ -78,13 +79,13 @@ const AuthProvider = ({ children }: Props) => {
 
     try {
       await auth().currentUser?.updateProfile({
-        displayName: currentUser?.displayName || fullName,
         photoURL:
           currentUser?.photoURL ||
           'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y',
       });
 
       await firestore().collection('users').doc(user?.uid).set({
+        fullName,
         address,
         cardNumber,
       });
@@ -109,6 +110,37 @@ const AuthProvider = ({ children }: Props) => {
     }
   };
 
+  const facebookSignIn = async () => {
+    try {
+      // Attempt login with permissions
+      const result = await LoginManager.logInWithPermissions([
+        'public_profile',
+        'email',
+      ]);
+  
+      if (result.isCancelled) {
+        throw 'User cancelled the login process';
+      }
+  
+      // Once signed in, get the users AccesToken
+      const data = await AccessToken.getCurrentAccessToken();
+  
+      if (!data) {
+        throw 'Something went wrong obtaining access token';
+      }
+  
+      // Create a Firebase credential with the AccessToken
+      const facebookCredential = auth.FacebookAuthProvider.credential(
+        data.accessToken,
+      );
+  
+      // Sign-in the user with the credential
+      await auth().signInWithCredential(facebookCredential);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const signOut = async () => {
     try {
       await auth().signOut();
@@ -128,6 +160,7 @@ const AuthProvider = ({ children }: Props) => {
         signUpAccount,
         signUpPersonalDetails,
         googleSignIn,
+        facebookSignIn,
         signOut,
       }}>
       {children}

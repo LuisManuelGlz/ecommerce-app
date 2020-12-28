@@ -18,7 +18,7 @@ type FormData = {
 };
 
 const SignUpStepOneScreen = () => {
-  const { signUpAccount, googleSignIn } = useContext(AuthContext)
+  const { signUpAccount, googleSignIn, facebookSignIn } = useContext(AuthContext)
   const navigation = useNavigation();
   const { control, handleSubmit, errors, setValue } = useForm<FormData>();
 
@@ -55,6 +55,7 @@ const SignUpStepOneScreen = () => {
               color={Colors.facebook}
             />
           }
+          onPress={() => facebookSignIn()}
         />
         <SocialButton
           background="twitter"
