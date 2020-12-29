@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import HomeNavigator from './HomeNavigator';
@@ -9,7 +9,7 @@ import { Colors } from '../styles';
 
 const Tab = createBottomTabNavigator();
 
-const TabsNavigator = () => {
+const TabsNavigator = (headerRight: JSX.Element) => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({

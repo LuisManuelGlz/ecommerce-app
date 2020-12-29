@@ -1,7 +1,6 @@
 import React, { createRef, useContext } from 'react';
 import { TextInput, View } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
-import auth from '@react-native-firebase/auth';
 import LinearGradient from 'react-native-linear-gradient';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';

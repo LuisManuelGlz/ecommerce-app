@@ -21,12 +21,8 @@ const AppNavigator = () => {
   return (
     <AuthProvider>
       <NavigationContainer theme={Dark}>
-        <AppStack.Navigator>
-          <AppStack.Screen
-            name="Root"
-            component={RootNavigator}
-            options={{ headerShown: false }}
-          />
+        <AppStack.Navigator screenOptions={{ headerShown: false }}>
+          <AppStack.Screen name="Root" component={RootNavigator} />
         </AppStack.Navigator>
       </NavigationContainer>
     </AuthProvider>

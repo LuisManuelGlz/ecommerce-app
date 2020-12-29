@@ -18,29 +18,19 @@ const AuthNavigator = () => {
   }, []);
 
   return (
-    <AuthStack.Navigator screenOptions={{ headerTransparent: true }}>
+    <AuthStack.Navigator screenOptions={{ headerShown: false }}>
       {user ? (
         <AuthStack.Screen
           name="SignUpStepTwo"
           component={SignUpStepTwoScreen}
-          options={{ title: '' }}
         />
       ) : (
         <Fragment>
-          <AuthStack.Screen
-            name="Intro"
-            component={IntroScreen}
-            options={{ headerShown: false }}
-          />
-          <AuthStack.Screen
-            name="SignIn"
-            component={SignInScreen}
-            options={{ headerShown: false }}
-          />
+          <AuthStack.Screen name="Intro" component={IntroScreen} />
+          <AuthStack.Screen name="SignIn" component={SignInScreen} />
           <AuthStack.Screen
             name="SignUpStepOne"
             component={SignUpStepOneScreen}
-            options={{ headerShown: false }}
           />
         </Fragment>
       )}

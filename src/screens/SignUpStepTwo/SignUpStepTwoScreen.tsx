@@ -2,7 +2,6 @@ import React, { createRef, useContext } from 'react';
 import { TextInput, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { Controller, useForm } from 'react-hook-form';
-import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../../styles';
