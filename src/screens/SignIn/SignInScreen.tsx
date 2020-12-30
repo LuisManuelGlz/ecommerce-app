@@ -16,7 +16,9 @@ type FormData = {
 };
 
 const SignInScreen = () => {
-  const { signIn, googleSignIn, facebookSignIn } = useContext(AuthContext);
+  const { signIn, googleSignIn, facebookSignIn, twitterSignIn } = useContext(
+    AuthContext,
+  );
   const navigation = useNavigation();
   const { control, handleSubmit, errors, setValue } = useForm<FormData>();
 
@@ -157,6 +159,7 @@ const SignInScreen = () => {
           block
           title="Iniciar sesión con Twitter"
           icon={<Ionicons name="logo-twitter" size={30} color={Colors.light} />}
+          onPress={() => twitterSignIn()}
         />
       </View>
 

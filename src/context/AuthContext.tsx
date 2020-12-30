@@ -9,6 +9,7 @@ import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { GoogleSignin } from '@react-native-community/google-signin';
 import { LoginManager, AccessToken } from 'react-native-fbsdk';
+import { NativeModules } from 'react-native';
 import { IUserForSignIn } from '../interfaces/IUserForSignIn';
 import { IUserForSignUpAccount } from '../interfaces/IUserForSignUpAccount';
 import { IUserForSignUpPersonalDetails } from '../interfaces/IUserForSignUpPersonalDetails';
@@ -25,6 +26,7 @@ type AuthContextType = {
   ) => void;
   googleSignIn: () => void;
   facebookSignIn: () => void;
+  twitterSignIn: () => void;
   signOut: () => void;
 };
 
@@ -33,6 +35,7 @@ interface Props {
 }
 
 export const AuthContext = createContext({} as AuthContextType);
+const { RNTwitterSignIn } = NativeModules;
 
 const AuthProvider = ({ children }: Props) => {
   const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
@@ -141,6 +144,21 @@ const AuthProvider = ({ children }: Props) => {
     }
   };
 
+  const twitterSignIn = async () => {
+    try {
+      // Perform the login request
+      const { authToken, authTokenSecret } = await RNTwitterSignIn.logIn();
+  
+      // Create a Twitter credential with the tokens
+      const twitterCredential = auth.TwitterAuthProvider.credential(authToken, authTokenSecret);
+  
+      // Sign-in the user with the credential
+      await auth().signInWithCredential(twitterCredential);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const signOut = async () => {
     try {
       await auth().signOut();
@@ -161,6 +179,7 @@ const AuthProvider = ({ children }: Props) => {
         signUpPersonalDetails,
         googleSignIn,
         facebookSignIn,
+        twitterSignIn,
         signOut,
       }}>
       {children}
