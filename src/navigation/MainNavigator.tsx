@@ -11,8 +11,17 @@ import ChangeEmailScreen from '../screens/ChangeEmail';
 import ChangePasswordScreen from '../screens/ChangePassword';
 import { Colors, Font } from '../styles';
 import { useNavigation } from '@react-navigation/native';
+import { IProduct } from '../interfaces/IProduct';
 
-const MainStack = createStackNavigator();
+export type MainStackParamList = {
+  Home: undefined;
+  ShoppingCart: undefined;
+  ProductDetails: { product: IProduct };
+  ChangeEmail: undefined;
+  ChangePassword: undefined;
+};
+
+const MainStack = createStackNavigator<MainStackParamList>();
 
 const MainNavigator = () => {
   const navigation = useNavigation();

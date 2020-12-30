@@ -1,26 +1,29 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View, TouchableOpacity, Image } from 'react-native';
-import { Text, Button } from '..';
-import styles from './Card.styles';
+import Text from '../Text';
+import Button from '../Button';
+import { IProduct } from '../../interfaces/IProduct';
+import styles from './ProductCard.styles';
 
 interface Props {
-  item: any;
-  index: number;
+  product: IProduct;
+  index?: number;
 }
 
-const Card = ({ item, index }: Props) => {
+const ProductCard = ({ product, index }: Props) => {
   const navigation = useNavigation();
 
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={() => navigation.navigate('ProductDetails')}>
-      <Image style={styles.image} source={{ uri: item.image }} />
+      onPress={() => navigation.navigate('ProductDetails', { product })}
+      >
+      <Image style={styles.image} source={{ uri: product.images[0] }} />
       <View style={styles.footerContainer}>
-        <Text style={styles.title} size="h5">{item.title}</Text>
+        <Text style={styles.title} size="h5">{product.title}</Text>
         <View style={styles.footer}>
-          <Text size="h3">{item.price}</Text>
+          <Text size="h3">{product.price}</Text>
           <Button
             style={styles.button}
             background="primary"
@@ -32,4 +35,4 @@ const Card = ({ item, index }: Props) => {
   );
 };
 
-export default Card;
+export default ProductCard;

@@ -5,7 +5,8 @@ import Text from './Text';
 import UserInfo from './UserInfo';
 import AccountOption from './AccountOption';
 import HistoryOrder from './HistoryOrder';
-import Card from './Card';
+import ProductCard from './ProductCard';
+import ImageGallery from './ImageGallery';
 
 export {
   Input,
@@ -15,5 +16,6 @@ export {
   UserInfo,
   AccountOption,
   HistoryOrder,
-  Card,
+  ProductCard,
+  ImageGallery,
 };

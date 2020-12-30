@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Button, Image, StyleProp, ViewStyle } from 'react-native';
-import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import { launchImageLibrary } from 'react-native-image-picker/src';
 import Text from '../Text';
