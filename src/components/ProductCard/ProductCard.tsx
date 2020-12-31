@@ -26,7 +26,7 @@ const ProductCard = ({ product, index }: Props) => {
           {product.title}
         </Text>
         <View style={styles.footer}>
-          <Text size="h3">{product.price}</Text>
+          <Text size="h3">$ {product.price}</Text>
           <Button
             style={styles.button}
             background="primary"

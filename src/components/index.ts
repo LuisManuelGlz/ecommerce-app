@@ -8,6 +8,7 @@ import HistoryOrder from './HistoryOrder';
 import ProductCard from './ProductCard';
 import ImageGallery from './ImageGallery';
 import ShoppingCart from './ShoppingCart';
+import ShoppingCartItem from './ShoppingCartItem';
 
 export {
   Input,
@@ -20,4 +21,5 @@ export {
   ProductCard,
   ImageGallery,
   ShoppingCart,
+  ShoppingCartItem,
 };

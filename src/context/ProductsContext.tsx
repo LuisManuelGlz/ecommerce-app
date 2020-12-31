@@ -2,8 +2,6 @@ import React, {
   createContext,
   ReactNode,
   useState,
-  SetStateAction,
-  Dispatch,
   useContext,
 } from 'react';
 import firestore, {
@@ -69,7 +67,7 @@ const ProductsProvider = ({ children }: Props) => {
               .get();
             setProductsInCart((products) => [
               ...products,
-              productSnapshot.data() as IProduct,
+              { id: productSnapshot.id, ...productSnapshot.data() } as IProduct,
             ]);
           },
         );
