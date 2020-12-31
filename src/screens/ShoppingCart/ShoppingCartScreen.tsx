@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { View, FlatList } from 'react-native';
 import { ProductsContext } from '../../context/ProductsContext';
 import { ShoppingCartItem } from '../../components';
@@ -9,10 +9,6 @@ import styles from './ShoppingCartScreen.styles';
 const ShoppingCartScreen = () => {
   const headerHeight = useHeaderHeight();
   const { productsInCart } = useContext(ProductsContext);
-
-  useEffect(() => {
-    console.log(productsInCart);
-  }, []);
 
   return (
     <View style={[styles.container, { marginTop: headerHeight }]}>
