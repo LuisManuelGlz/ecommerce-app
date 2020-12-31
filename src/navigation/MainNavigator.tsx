@@ -10,8 +10,9 @@ import ProductDetailsScreen from '../screens/ProductDetails';
 import ChangeEmailScreen from '../screens/ChangeEmail';
 import ChangePasswordScreen from '../screens/ChangePassword';
 import { Colors, Font } from '../styles';
-import { useNavigation } from '@react-navigation/native';
 import { IProduct } from '../interfaces/IProduct';
+import ProductsProvider from '../context/ProductsContext';
+import { ShoppingCart } from '../components';
 
 export type MainStackParamList = {
   Home: undefined;
@@ -24,63 +25,56 @@ export type MainStackParamList = {
 const MainStack = createStackNavigator<MainStackParamList>();
 
 const MainNavigator = () => {
-  const navigation = useNavigation();
-
   return (
-    <MainStack.Navigator
-      screenOptions={{
-        headerTransparent: true,
-        headerLeft: (props) => (
-          <Ionicons
-            {...props}
-            style={{ marginLeft: 20 }}
-            name="chevron-back"
-            color={Colors.primary}
-            size={30}
-          />
-        ),
-        headerTitleAlign: 'center',
-        headerTitleStyle: { fontSize: Font.FontSize.H2 },
-        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-      }}>
-      <MainStack.Screen
-        name="Home"
-        component={TabsNavigator}
-        options={{ title: '', headerLeft: undefined }}
-      />
-      <MainStack.Screen
-        name="ShoppingCart"
-        component={ShoppingCartScreen}
-        options={{ title: 'Carrito de compras' }}
-      />
-      <MainStack.Screen
-        name="ProductDetails"
-        component={ProductDetailsScreen}
-        options={{
-          title: '',
-          headerRight: (props) => (
+    <ProductsProvider>
+      <MainStack.Navigator
+        screenOptions={{
+          headerTransparent: true,
+          headerLeft: (props) => (
             <Ionicons
               {...props}
-              style={{ marginRight: 20 }}
-              name="cart"
+              style={{ marginLeft: 20 }}
+              name="chevron-back"
               color={Colors.primary}
               size={30}
-              onPress={() => navigation.navigate('ShoppingCart')}
             />
           ),
-        }}
-      />
-      <MainStack.Screen
-        name="ChangeEmail"
-        component={ChangeEmailScreen}
-        options={{ title: 'Correo electrónico' }}
-      />
-      <MainStack.Screen
-        name="ChangePassword"
-        component={ChangePasswordScreen}
-        options={{ title: 'Contraseña' }}
-      />
-    </MainStack.Navigator>
+          headerTitleAlign: 'center',
+          headerTitleStyle: { fontSize: Font.FontSize.H2 },
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}>
+        <MainStack.Screen
+          name="Home"
+          component={TabsNavigator}
+          options={{ title: '', headerLeft: undefined }}
+        />
+        <MainStack.Screen
+          name="ShoppingCart"
+          component={ShoppingCartScreen}
+          options={{ title: 'Carrito de compras' }}
+        />
+        <MainStack.Screen
+          name="ProductDetails"
+          component={ProductDetailsScreen}
+          options={{
+            title: '',
+            headerRight: () => (
+              <ShoppingCart />
+            ),
+          }}
+        />
+        <MainStack.Screen
+          name="ChangeEmail"
+          component={ChangeEmailScreen}
+          options={{ title: 'Correo electrónico' }}
+        />
+        <MainStack.Screen
+          name="ChangePassword"
+          component={ChangePasswordScreen}
+          options={{ title: 'Contraseña' }}
+        />
+      </MainStack.Navigator>
+    </ProductsProvider>
   );
 };
 

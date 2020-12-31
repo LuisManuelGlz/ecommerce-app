@@ -45,7 +45,7 @@ const ImageGallery = ({ images }: Props) => {
           height: 10,
           borderRadius: 5,
           marginHorizontal: 10,
-          backgroundColor: Colors.light,
+          backgroundColor: Colors.darkLighten,
         }}
         inactiveDotOpacity={0.4}
         inactiveDotScale={0.6}

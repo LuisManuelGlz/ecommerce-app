@@ -1,18 +1,26 @@
-import React from 'react';
-import { useHeaderHeight } from '@react-navigation/stack';
-import Carousel from 'react-native-snap-carousel';
+import React, { useContext, useEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
+import { useHeaderHeight } from '@react-navigation/stack';
+import firestore from '@react-native-firebase/firestore';
+import Carousel from 'react-native-snap-carousel';
 import { ProductCard, Text } from '../../components';
 import styles from './HomeScreen.styles';
 import { IProduct } from '../../interfaces/IProduct';
+import { ProductsContext } from '../../context/ProductsContext';
 
 const HomeScreen = () => {
   const headerHeight = useHeaderHeight();
+  const { fetchProducts, newer, mostSold, gaming } = useContext(ProductsContext);
 
-  const entries = [
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const products = [
     {
       title: 'Beautiful and dramatic Antelope Canyon',
-      description: 'Lorem ipsum dolor sit amet et nuncat mergitur',
+      description:
+        'Lorem ipsum dolor sit amet et nuncat mergitur Lorem ipsum dolor sit amet et nuncat mergitur Lorem ipsum dolor sit amet et nuncat mergitur',
       price: '$99.99',
       images: [
         'https://i.imgur.com/UYiroysl.jpg',
@@ -22,7 +30,8 @@ const HomeScreen = () => {
     },
     {
       title: 'Earlier this morning, NYC',
-      description: 'Lorem ipsum dolor sit amet',
+      description:
+        'Lorem ipsum dolor sit amet et nuncat mergitur Lorem ipsum dolor sit amet et nuncat mergitur Lorem ipsum dolor sit amet et nuncat mergitur',
       price: '$99.99',
       images: [
         'https://i.imgur.com/UPrs1EWl.jpg',
@@ -32,7 +41,8 @@ const HomeScreen = () => {
     },
     {
       title: 'White Pocket Sunset',
-      description: 'Lorem ipsum dolor sit amet et nuncat ',
+      description:
+        'Lorem ipsum dolor sit amet et nuncat mergitur Lorem ipsum dolor sit amet et nuncat mergitur Lorem ipsum dolor sit amet et nuncat mergitur',
       price: '$99.99',
       images: [
         'https://i.imgur.com/MABUbpDl.jpg',
@@ -52,25 +62,25 @@ const HomeScreen = () => {
         Lo más vendido
       </Text>
       <Carousel
-        data={entries}
+        data={mostSold}
         renderItem={_renderItem}
         sliderWidth={450}
         itemWidth={300}
       />
       <Text style={styles.sectionTitle} size="h2">
-        Mouses
+        Novedades
       </Text>
       <Carousel
-        data={entries}
+        data={newer}
         renderItem={_renderItem}
         sliderWidth={450}
         itemWidth={300}
       />
       <Text style={styles.sectionTitle} size="h2">
-        Audífonos
+        Gaming
       </Text>
       <Carousel
-        data={entries}
+        data={gaming}
         renderItem={_renderItem}
         sliderWidth={450}
         itemWidth={300}
