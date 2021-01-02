@@ -26,10 +26,14 @@ const ProductScreen = ({ route }: Props) => {
   const { product } = route.params;
   const headerHeight = useHeaderHeight();
   const [isProductInTheCart, setIsProductInTheCart] = useState(false);
+  const [isProductInWishList, setIsProductInWishList] = useState(false);
   const {
     addProductToShoppingCart,
     removeProductFromShoppingCart,
+    addProductToWishList,
+    removeProductFromWishList,
     productsInCart,
+    productsInWishList,
   } = useContext(ProductsContext);
   const navigation = useNavigation();
   const opacity = new Animated.Value(0.5);
@@ -117,11 +121,22 @@ const ProductScreen = ({ route }: Props) => {
     setIsOpen(true);
   };
 
+  const onWishListPress = (product: IProduct) => {
+    if (isProductInWishList) {
+      removeProductFromWishList(product.id);
+      setIsProductInWishList(false);
+    } else {
+      addProductToWishList(product);
+      setIsProductInWishList(true);
+    }
+  };
+
   useEffect(() => {
     if (productsInCart.find((p: IProduct) => p.id === product.id)) {
       setIsProductInTheCart(true);
-    } else {
-      setIsProductInTheCart(false);
+    }
+    if (productsInWishList.find((p: IProduct) => p.id === product.id)) {
+      setIsProductInWishList(true);
     }
   }, []);
 
@@ -165,7 +180,13 @@ const ProductScreen = ({ route }: Props) => {
                 background="primary"
                 onPress={() => addProductToShoppingCart(product)}
               />
-              <TouchableOpacity style={styles.wishListButton}>
+              <TouchableOpacity
+                style={
+                  isProductInWishList
+                    ? styles.wishListButtonOn
+                    : styles.wishListButtonOff
+                }
+                onPress={() => onWishListPress(product)}>
                 <Ionicons name="bookmark" color={Colors.light} size={30} />
               </TouchableOpacity>
             </Fragment>

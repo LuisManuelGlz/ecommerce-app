@@ -10,9 +10,12 @@ type AuthContextType = {
   mostSold: IProduct[];
   gaming: IProduct[];
   productsInCart: IProduct[];
+  productsInWishList: IProduct[];
   fetchProducts: () => void;
   addProductToShoppingCart: (product: IProduct) => void;
   removeProductFromShoppingCart: (productId: string) => void;
+  addProductToWishList: (product: IProduct) => void;
+  removeProductFromWishList: (productId: string) => void;
 };
 
 interface Props {
@@ -27,6 +30,7 @@ const ProductsProvider = ({ children }: Props) => {
   const [mostSold, setMostSold] = useState<IProduct[]>([]);
   const [gaming, setGaming] = useState<IProduct[]>([]);
   const [productsInCart, setProductsInCart] = useState<IProduct[]>([]);
+  const [productsInWishList, setProductsInWishList] = useState<IProduct[]>([]);
 
   const fetchProducts = async () => {
     try {
@@ -62,6 +66,22 @@ const ProductsProvider = ({ children }: Props) => {
               .doc(product.id)
               .get();
             setProductsInCart((products) => [
+              ...products,
+              { id: productSnapshot.id, ...productSnapshot.data() } as IProduct,
+            ]);
+          },
+        );
+      }
+
+      const wishList = userSnapshot.data()?.wishList;
+      if (wishList) {
+        wishList.forEach(
+          async (product: FirebaseFirestoreTypes.DocumentData) => {
+            const productSnapshot = await firestore()
+              .collection('products')
+              .doc(product.id)
+              .get();
+            setProductsInWishList((products) => [
               ...products,
               { id: productSnapshot.id, ...productSnapshot.data() } as IProduct,
             ]);
@@ -107,6 +127,40 @@ const ProductsProvider = ({ children }: Props) => {
     }
   };
 
+  const addProductToWishList = async (product: IProduct) => {
+    try {
+      await firestore()
+        .collection('users')
+        .doc(user?.uid)
+        .update({
+          wishList: firestore.FieldValue.arrayUnion(
+            firestore().doc(`products/${product.id}`),
+          ),
+        });
+      setProductsInWishList((products) => [...products, product]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const removeProductFromWishList = async (productId: string) => {
+    try {
+      await firestore()
+        .collection('users')
+        .doc(user?.uid)
+        .update({
+          wishList: firestore.FieldValue.arrayRemove(
+            firestore().doc(`products/${productId}`),
+          ),
+        });
+      setProductsInWishList((products) =>
+        products.filter((products) => products.id !== productId),
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <ProductsContext.Provider
       value={{
@@ -114,9 +168,12 @@ const ProductsProvider = ({ children }: Props) => {
         mostSold,
         gaming,
         productsInCart,
+        productsInWishList,
         fetchProducts,
         addProductToShoppingCart,
         removeProductFromShoppingCart,
+        addProductToWishList,
+        removeProductFromWishList,
       }}>
       {children}
     </ProductsContext.Provider>

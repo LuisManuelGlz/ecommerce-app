@@ -17,8 +17,16 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  wishListButton: {
+  wishListButtonOn: {
     backgroundColor: Colors.primary,
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 51,
+    height: 51,
+  },
+  wishListButtonOff: {
+    backgroundColor: Colors.darkLighten,
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',

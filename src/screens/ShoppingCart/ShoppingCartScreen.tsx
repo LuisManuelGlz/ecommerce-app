@@ -1,4 +1,4 @@
-import React, { createRef, useContext, useState } from 'react';
+import React, { createRef, Fragment, useContext, useState } from 'react';
 import { View, FlatList, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import BottomSheet from 'reanimated-bottom-sheet';
@@ -81,7 +81,7 @@ const ShoppingCartScreen = () => {
   };
 
   return (
-    <>
+    <Fragment>
       <View style={[styles.container, { marginTop: headerHeight }]}>
         {productsInCart.length === 0 && (
           <View style={styles.noProducts}>
@@ -119,7 +119,7 @@ const ShoppingCartScreen = () => {
         onCloseEnd={onClose}
       />
       {isOpen && renderBackDrop()}
-    </>
+    </Fragment>
   );
 };
 

@@ -17,7 +17,9 @@ import { ShoppingCart } from '../components';
 export type MainStackParamList = {
   Home: undefined;
   ShoppingCart: undefined;
-  ProductDetails: { product: IProduct };
+  ProductDetails: {
+    product: IProduct;
+  };
   ChangeEmail: undefined;
   ChangePassword: undefined;
 };
@@ -58,9 +60,7 @@ const MainNavigator = () => {
           component={ProductDetailsScreen}
           options={{
             title: '',
-            headerRight: () => (
-              <ShoppingCart />
-            ),
+            headerRight: () => <ShoppingCart />,
           }}
         />
         <MainStack.Screen

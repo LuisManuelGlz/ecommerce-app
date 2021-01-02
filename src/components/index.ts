@@ -9,6 +9,7 @@ import ProductCard from './ProductCard';
 import ImageGallery from './ImageGallery';
 import ShoppingCart from './ShoppingCart';
 import ShoppingCartItem from './ShoppingCartItem';
+import WishListItem from './WishListItem';
 
 export {
   Input,
@@ -22,4 +23,5 @@ export {
   ImageGallery,
   ShoppingCart,
   ShoppingCartItem,
+  WishListItem,
 };

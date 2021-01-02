@@ -6,7 +6,7 @@ const WishListStack = createStackNavigator();
 
 const WishListNavigator = () => {
   return (
-    <WishListStack.Navigator>
+    <WishListStack.Navigator screenOptions={{ headerTransparent: true, title: 'Lista de deseos' }}>
       <WishListStack.Screen name="WishList" component={WishListScreen} />
     </WishListStack.Navigator>
   );
