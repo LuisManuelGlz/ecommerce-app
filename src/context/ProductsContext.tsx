@@ -1,9 +1,4 @@
-import React, {
-  createContext,
-  ReactNode,
-  useState,
-  useContext,
-} from 'react';
+import React, { createContext, ReactNode, useState, useContext } from 'react';
 import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
@@ -17,6 +12,7 @@ type AuthContextType = {
   productsInCart: IProduct[];
   fetchProducts: () => void;
   addProductToShoppingCart: (product: IProduct) => void;
+  removeProductFromShoppingCart: (productId: string) => void;
 };
 
 interface Props {
@@ -93,6 +89,24 @@ const ProductsProvider = ({ children }: Props) => {
     }
   };
 
+  const removeProductFromShoppingCart = async (productId: string) => {
+    try {
+      await firestore()
+        .collection('users')
+        .doc(user?.uid)
+        .update({
+          shoppingCart: firestore.FieldValue.arrayRemove(
+            firestore().doc(`products/${productId}`),
+          ),
+        });
+      setProductsInCart((products) =>
+        products.filter((products) => products.id !== productId),
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <ProductsContext.Provider
       value={{
@@ -102,6 +116,7 @@ const ProductsProvider = ({ children }: Props) => {
         productsInCart,
         fetchProducts,
         addProductToShoppingCart,
+        removeProductFromShoppingCart,
       }}>
       {children}
     </ProductsContext.Provider>

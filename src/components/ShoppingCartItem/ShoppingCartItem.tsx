@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Dispatch } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
@@ -9,9 +9,11 @@ import { Colors } from '../../styles';
 
 interface Props {
   product: IProduct;
+  onRemove: () => void;
+  setProductSelected: Dispatch<React.SetStateAction<IProduct | undefined>>;
 }
 
-const ShoppingCartItem = ({ product }: Props) => {
+const ShoppingCartItem = ({ product, onRemove, setProductSelected }: Props) => {
   const navigation = useNavigation();
 
   return (
@@ -34,7 +36,12 @@ const ShoppingCartItem = ({ product }: Props) => {
           $ {product.price}
         </Text>
       </View>
-      <TouchableOpacity style={styles.deleteButton}>
+      <TouchableOpacity
+        style={styles.deleteButton}
+        onPress={() => {
+          setProductSelected(product);
+          onRemove();
+        }}>
         <Ionicons name="close" color={Colors.light} size={20} />
       </TouchableOpacity>
     </TouchableOpacity>
