@@ -4,6 +4,7 @@ import React, {
   useState,
   SetStateAction,
   Dispatch,
+  useContext,
 } from 'react';
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
@@ -13,6 +14,7 @@ import { NativeModules } from 'react-native';
 import { IUserForSignIn } from '../interfaces/IUserForSignIn';
 import { IUserForSignUpAccount } from '../interfaces/IUserForSignUpAccount';
 import { IUserForSignUpPersonalDetails } from '../interfaces/IUserForSignUpPersonalDetails';
+import { AlertContext } from './AlertContext';
 
 type AuthContextType = {
   user: FirebaseAuthTypes.User | null;
@@ -38,6 +40,7 @@ export const AuthContext = createContext({} as AuthContextType);
 const { RNTwitterSignIn } = NativeModules;
 
 const AuthProvider = ({ children }: Props) => {
+  const { alert } = useContext(AlertContext);
   const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
   const [isAuthCompleted, setIsAuthCompleted] = useState(false);
 
@@ -46,14 +49,14 @@ const AuthProvider = ({ children }: Props) => {
       await auth().signInWithEmailAndPassword(email, password);
     } catch (error) {
       if (error.code === 'auth/invalid-email') {
-        console.log('El correo no es válido');
+        alert('error', 'Oops!', 'El correo no es válido');
       } else if (error.code === 'auth/user-disabled') {
-        console.log('El usuario ha sido deshabilitado');
+        alert('error', 'Oops!', 'El usuario ha sido deshabilitado');
       } else if (
         error.code === 'auth/user-not-found' ||
         error.code === 'auth/wrong-password'
       ) {
-        console.log('El correo o la contraseña son incorrectos');
+        alert('error', 'Oops!', 'El correo o la contraseña son incorrectos');
       }
 
       console.error(error);
@@ -65,9 +68,15 @@ const AuthProvider = ({ children }: Props) => {
       await auth().createUserWithEmailAndPassword(email, password);
     } catch (error) {
       if (error.code === 'auth/email-already-in-use') {
-        console.log('El correo ya está en uso');
+        alert('error', 'Oops!', 'El correo ya está en uso');
       } else if (error.code === 'auth/invalid-email') {
-        console.log('El correo no es válido');
+        alert('error', 'Oops!', 'El correo no es válido');
+      } else if (error.code === 'auth/weak-password') {
+        alert(
+          'error',
+          'Oops!',
+          'Tu contraseña es muy débil, elige una más fuerte',
+        );
       }
       console.error(error);
     }
@@ -81,7 +90,8 @@ const AuthProvider = ({ children }: Props) => {
     const { currentUser } = auth();
 
     try {
-      await auth().currentUser?.updateProfile({
+      await currentUser?.updateProfile({
+        displayName: currentUser?.displayName || fullName,
         photoURL:
           currentUser?.photoURL ||
           'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y',
@@ -92,9 +102,17 @@ const AuthProvider = ({ children }: Props) => {
         address,
         cardNumber,
       });
+
       setIsAuthCompleted(true);
+
+      alert(
+        'success',
+        'Registro exitoso',
+        'Tu cuenta ha sido creada correctamente',
+      );
     } catch (error) {
       console.log(error);
+      alert('error', 'Oops!', 'Algo salió mal');
     }
   };
 
@@ -110,6 +128,7 @@ const AuthProvider = ({ children }: Props) => {
       await auth().signInWithCredential(googleCredential);
     } catch (error) {
       console.log(error);
+      alert('error', 'Oops!', 'Algo salió mal');
     }
   };
 
@@ -120,27 +139,28 @@ const AuthProvider = ({ children }: Props) => {
         'public_profile',
         'email',
       ]);
-  
+
       if (result.isCancelled) {
         throw 'User cancelled the login process';
       }
-  
+
       // Once signed in, get the users AccesToken
       const data = await AccessToken.getCurrentAccessToken();
-  
+
       if (!data) {
         throw 'Something went wrong obtaining access token';
       }
-  
+
       // Create a Firebase credential with the AccessToken
       const facebookCredential = auth.FacebookAuthProvider.credential(
         data.accessToken,
       );
-  
+
       // Sign-in the user with the credential
       await auth().signInWithCredential(facebookCredential);
     } catch (error) {
       console.log(error);
+      alert('error', 'Oops!', 'Algo salió mal');
     }
   };
 
@@ -148,14 +168,18 @@ const AuthProvider = ({ children }: Props) => {
     try {
       // Perform the login request
       const { authToken, authTokenSecret } = await RNTwitterSignIn.logIn();
-  
+
       // Create a Twitter credential with the tokens
-      const twitterCredential = auth.TwitterAuthProvider.credential(authToken, authTokenSecret);
-  
+      const twitterCredential = auth.TwitterAuthProvider.credential(
+        authToken,
+        authTokenSecret,
+      );
+
       // Sign-in the user with the credential
       await auth().signInWithCredential(twitterCredential);
     } catch (error) {
       console.log(error);
+      alert('error', 'Oops!', 'Algo salió mal');
     }
   };
 
@@ -164,6 +188,7 @@ const AuthProvider = ({ children }: Props) => {
       await auth().signOut();
     } catch (error) {
       console.log(error);
+      alert('error', 'Oops!', 'Algo salió mal');
     }
   };
 

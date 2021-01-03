@@ -1,4 +1,4 @@
-import React, { createRef } from 'react';
+import React, { createRef, useContext } from 'react';
 import { TextInput, View } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import { useHeaderHeight } from '@react-navigation/stack';
@@ -9,6 +9,7 @@ import { Input, Text, Button } from '../../components';
 import styles from './ChangePasswordScreen.styles';
 import validation from './ChangePasswordValidation';
 import { Colors } from '../../styles';
+import { AlertContext } from '../../context/AlertContext';
 
 type FormData = {
   currentPassword: string;
@@ -18,6 +19,7 @@ type FormData = {
 const ChangePasswordScreen = () => {
   const headerHeight = useHeaderHeight();
   const navigation = useNavigation();
+  const { alert } = useContext(AlertContext);
   const { control, handleSubmit, errors, setValue } = useForm<FormData>();
 
   const currentPasswordInput = createRef<TextInput>();
@@ -25,29 +27,35 @@ const ChangePasswordScreen = () => {
 
   const onSubmit = ({ currentPassword, newPassword }: FormData) => {
     const reauthenticate = (currentPassword: string) => {
-      const user = auth().currentUser;
+      const { currentUser } = auth();
       const credential = auth.EmailAuthProvider.credential(
-        user!.email!,
+        currentUser!.email!,
         currentPassword,
       );
-      return user!.reauthenticateWithCredential(credential);
+      return currentUser!.reauthenticateWithCredential(credential);
     };
 
     reauthenticate(currentPassword)
       .then(() => {
-        const user = auth().currentUser;
-        user
+        const { currentUser } = auth();
+        currentUser
           ?.updatePassword(newPassword)
           .then(() => {
             navigation.goBack();
-            console.log('Password updated!');
+            alert(
+              'success',
+              'Contraseña actualizada',
+              'Tu contraseña ha sido actualizada correctamente',
+            );
           })
           .catch((error) => {
             console.log(error);
+            alert('error', 'Oops!', 'Algo salió mal');
           });
       })
       .catch((error) => {
         console.log(error);
+        alert('error', 'Oops!', 'La contraseña actual es incorrecta');
       });
   };
 

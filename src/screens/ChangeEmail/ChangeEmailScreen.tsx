@@ -1,4 +1,4 @@
-import React, { createRef } from 'react';
+import React, { createRef, useContext } from 'react';
 import { TextInput, View } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import { useHeaderHeight } from '@react-navigation/stack';
@@ -9,6 +9,7 @@ import styles from './ChangeEmailScreen.styles';
 import validation from './ChangeEmailValidation';
 import { Colors } from '../../styles';
 import { useNavigation } from '@react-navigation/native';
+import { AlertContext } from '../../context/AlertContext';
 
 type FormData = {
   newEmail: string;
@@ -17,20 +18,30 @@ type FormData = {
 const ChangeEmailScreen = () => {
   const headerHeight = useHeaderHeight();
   const navigation = useNavigation();
+  const { alert } = useContext(AlertContext);
   const { control, handleSubmit, errors, setValue } = useForm<FormData>();
 
   const newEmailInput = createRef<TextInput>();
-  
+
   const onSubmit = ({ newEmail }: FormData) => {
-    const user = auth().currentUser;
-    user?.updateEmail(newEmail)
+    const { currentUser } = auth();
+    currentUser
+      ?.updateEmail(newEmail)
       .then(() => {
-        user?.sendEmailVerification()
-          .then(() => {
-            setValue('newEmail', '');
-            navigation.goBack();
-            console.log('Email de verificación enviado a', newEmail);
-          });
+        currentUser?.sendEmailVerification().then(() => {
+          setValue('newEmail', '');
+          navigation.goBack();
+          alert(
+            'success',
+            'Correo actualizado',
+            `Correo de verificación enviado a ${newEmail}`,
+          );
+        });
+      })
+      .catch((error) => {
+        // email ya en uso
+        console.log(error);
+        alert('error', 'Error', 'El correo ya está en uso');
       });
   };
 
