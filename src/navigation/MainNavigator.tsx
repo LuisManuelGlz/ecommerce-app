@@ -7,6 +7,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import TabsNavigator from './TabsNavigator';
 import ShoppingCartScreen from '../screens/ShoppingCart';
 import ProductDetailsScreen from '../screens/ProductDetails';
+import SearchingScreen from '../screens/Searching';
+import SearchResultScreen from '../screens/SearchResult';
 import ChangeEmailScreen from '../screens/ChangeEmail';
 import ChangePasswordScreen from '../screens/ChangePassword';
 import { Colors, Font } from '../styles';
@@ -20,6 +22,8 @@ export type MainStackParamList = {
   ProductDetails: {
     product: IProduct;
   };
+  Searching: undefined;
+  SearchResult: { search: string };
   ChangeEmail: undefined;
   ChangePassword: undefined;
 };
@@ -62,6 +66,19 @@ const MainNavigator = () => {
             title: '',
             headerRight: () => <ShoppingCart />,
           }}
+        />
+        <MainStack.Screen
+          name="Searching"
+          component={SearchingScreen}
+          options={{
+            title: '',
+            cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+          }}
+        />
+        <MainStack.Screen
+          name="SearchResult"
+          component={SearchResultScreen}
+          options={{ title: '' }}
         />
         <MainStack.Screen
           name="ChangeEmail"

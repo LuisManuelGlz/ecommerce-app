@@ -23,10 +23,6 @@ interface Props {
 }
 
 const ProductScreen = ({ route }: Props) => {
-  const { product } = route.params;
-  const headerHeight = useHeaderHeight();
-  const [isProductInTheCart, setIsProductInTheCart] = useState(false);
-  const [isProductInWishList, setIsProductInWishList] = useState(false);
   const {
     addProductToShoppingCart,
     removeProductFromShoppingCart,
@@ -35,6 +31,10 @@ const ProductScreen = ({ route }: Props) => {
     productsInCart,
     productsInWishList,
   } = useContext(ProductsContext);
+  const { product } = route.params;
+  const headerHeight = useHeaderHeight();
+  const [isProductInTheCart, setIsProductInTheCart] = useState(false);
+  const [isProductInWishList, setIsProductInWishList] = useState(false);
   const navigation = useNavigation();
   const opacity = new Animated.Value(0.5);
   const [isOpen, setIsOpen] = useState(false);
@@ -178,7 +178,10 @@ const ProductScreen = ({ route }: Props) => {
               <Button
                 title="Añadir al carrito"
                 background="primary"
-                onPress={() => addProductToShoppingCart(product)}
+                onPress={() => {
+                  addProductToShoppingCart(product);
+                  setIsProductInTheCart(true);
+                }}
               />
               <TouchableOpacity
                 style={

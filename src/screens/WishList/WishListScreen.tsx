@@ -5,7 +5,7 @@ import { ProductsContext } from '../../context/ProductsContext';
 import { Button, WishListItem, Text } from '../../components';
 import { IProduct } from '../../interfaces/IProduct';
 import { useHeaderHeight } from '@react-navigation/stack';
-import styles from './WishList.styles';
+import styles from './WishListScreen.styles';
 import Animated, { Easing } from 'react-native-reanimated';
 
 const WishListScreen = () => {

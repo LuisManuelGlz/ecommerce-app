@@ -16,6 +16,7 @@ type AuthContextType = {
   removeProductFromShoppingCart: (productId: string) => void;
   addProductToWishList: (product: IProduct) => void;
   removeProductFromWishList: (productId: string) => void;
+  searchProducts: (search: string) => Promise<IProduct[] | undefined>;
 };
 
 interface Props {
@@ -161,6 +162,31 @@ const ProductsProvider = ({ children }: Props) => {
     }
   };
 
+  const searchProducts = async (search: string) => {
+    try {
+      const productsSnapshot = await firestore()
+        .collection('products')
+        .where('titleLower', '>=', search)
+        .where('titleLower', '<=', search + '\uf8ff')
+        .get();
+
+      const products: IProduct[] = [];
+
+      productsSnapshot.forEach((documentSnapshot) => {
+        const product = {
+          id: documentSnapshot.id,
+          ...documentSnapshot.data(),
+        } as IProduct;
+
+        products.push(product);
+      });
+
+      return products;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <ProductsContext.Provider
       value={{
@@ -174,6 +200,7 @@ const ProductsProvider = ({ children }: Props) => {
         removeProductFromShoppingCart,
         addProductToWishList,
         removeProductFromWishList,
+        searchProducts,
       }}>
       {children}
     </ProductsContext.Provider>

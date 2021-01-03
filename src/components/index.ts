@@ -10,6 +10,7 @@ import ImageGallery from './ImageGallery';
 import ShoppingCart from './ShoppingCart';
 import ShoppingCartItem from './ShoppingCartItem';
 import WishListItem from './WishListItem';
+import SearchResultItem from './SearchResultItem';
 
 export {
   Input,
@@ -24,4 +25,5 @@ export {
   ShoppingCart,
   ShoppingCartItem,
   WishListItem,
+  SearchResultItem,
 };
