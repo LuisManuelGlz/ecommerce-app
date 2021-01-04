@@ -1,7 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
+import firestore, {
+  FirebaseFirestoreTypes,
+} from '@react-native-firebase/firestore';
 import AuthNavigator from './AuthNavigator';
 import { AuthContext } from '../context/AuthContext';
 import MainNavigator from './MainNavigator';
@@ -9,9 +11,12 @@ import MainNavigator from './MainNavigator';
 const RootStack = createStackNavigator();
 
 const RootNavigator = () => {
-  const { setUser, isAuthCompleted, setIsAuthCompleted } = useContext(
-    AuthContext,
-  );
+  const {
+    setUser,
+    setPersonalDetails,
+    isAuthCompleted,
+    setIsAuthCompleted,
+  } = useContext(AuthContext);
 
   // Set an initializing state whilst Firebase connects
   const [isLoading, setIsLoading] = useState(true);
@@ -24,6 +29,12 @@ const RootNavigator = () => {
       try {
         const documentSnapshot = await getUserInfo(user);
         if (documentSnapshot.exists) {
+          const {
+            fullName,
+            address,
+            cardNumber,
+          } = documentSnapshot.data() as FirebaseFirestoreTypes.DocumentData;
+          setPersonalDetails({ fullName, address, cardNumber });
           setIsAuthCompleted(true);
         } else {
           setIsAuthCompleted(false);

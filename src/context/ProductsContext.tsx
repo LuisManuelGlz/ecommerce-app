@@ -3,6 +3,7 @@ import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
 import { IProduct } from '../interfaces/IProduct';
+import { IPaymentMethod } from '../interfaces/IPaymentMethod';
 import { AuthContext } from './AuthContext';
 
 type AuthContextType = {
@@ -11,12 +12,15 @@ type AuthContextType = {
   gaming: IProduct[];
   productsInCart: IProduct[];
   productsInWishList: IProduct[];
+  paymentMethods: IPaymentMethod[];
   fetchProducts: () => void;
   addProductToShoppingCart: (product: IProduct) => void;
   removeProductFromShoppingCart: (productId: string) => void;
   addProductToWishList: (product: IProduct) => void;
   removeProductFromWishList: (productId: string) => void;
   searchProducts: (search: string) => Promise<IProduct[] | undefined>;
+  fetchPaymentMethods: () => void;
+  addPaymentMethod: (paymentMethod: IPaymentMethod) => void;
 };
 
 interface Props {
@@ -32,6 +36,7 @@ const ProductsProvider = ({ children }: Props) => {
   const [gaming, setGaming] = useState<IProduct[]>([]);
   const [productsInCart, setProductsInCart] = useState<IProduct[]>([]);
   const [productsInWishList, setProductsInWishList] = useState<IProduct[]>([]);
+  const [paymentMethods, setPaymentMethods] = useState<IPaymentMethod[]>([]);
 
   const fetchProducts = async () => {
     try {
@@ -187,6 +192,60 @@ const ProductsProvider = ({ children }: Props) => {
     }
   };
 
+  const fetchPaymentMethods = async () => {
+    try {
+      const userSnapshot = await firestore()
+        .collection('users')
+        .doc(user?.uid)
+        .get();
+
+      const paymentMethods = userSnapshot.data()?.paymentMethods;
+      if (paymentMethods) {
+        paymentMethods.forEach(
+          async (paymentMethod: FirebaseFirestoreTypes.DocumentData) => {
+            const paymentMethodSnapshot = await firestore()
+              .collection('paymentMethods')
+              .doc(paymentMethod.id)
+              .get();
+
+            setPaymentMethods((paymentMethod) => [
+              ...paymentMethod,
+              {
+                id: paymentMethodSnapshot.id,
+                ...paymentMethodSnapshot.data(),
+              } as IPaymentMethod,
+            ]);
+          },
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const addPaymentMethod = async (paymentMethod: IPaymentMethod) => {
+    try {
+      const { id } = await firestore()
+        .collection('paymentMethods')
+        .add(paymentMethod);
+
+      await firestore()
+        .collection('users')
+        .doc(user?.uid)
+        .update({
+          paymentMethods: firestore.FieldValue.arrayUnion(
+            firestore().doc(`paymentMethods/${id}`),
+          ),
+        });
+      setPaymentMethods((paymentMethods) => [
+        ...paymentMethods,
+        { id, ...paymentMethod },
+      ]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <ProductsContext.Provider
       value={{
@@ -201,6 +260,9 @@ const ProductsProvider = ({ children }: Props) => {
         addProductToWishList,
         removeProductFromWishList,
         searchProducts,
+        paymentMethods,
+        fetchPaymentMethods,
+        addPaymentMethod,
       }}>
       {children}
     </ProductsContext.Provider>

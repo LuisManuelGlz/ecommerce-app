@@ -109,6 +109,14 @@ const ShoppingCartScreen = () => {
           )}
           contentContainerStyle={{ paddingHorizontal: 20 }}
         />
+        <View style={styles.buttonContainer}>
+          <Button
+            block
+            title="Realizar compra"
+            background="primary"
+            onPress={() => navigation.navigate('Payment')}
+          />
+        </View>
       </View>
       <BottomSheet
         ref={sheetRef}

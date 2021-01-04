@@ -19,6 +19,8 @@ import { AlertContext } from './AlertContext';
 type AuthContextType = {
   user: FirebaseAuthTypes.User | null;
   setUser: Dispatch<SetStateAction<FirebaseAuthTypes.User | null>>;
+  personalDetails: any;
+  setPersonalDetails: Dispatch<any>;
   isAuthCompleted: boolean;
   setIsAuthCompleted: Dispatch<SetStateAction<boolean>>;
   signIn: (userForSignIn: IUserForSignIn) => void;
@@ -42,6 +44,7 @@ const { RNTwitterSignIn } = NativeModules;
 const AuthProvider = ({ children }: Props) => {
   const { alert } = useContext(AlertContext);
   const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
+  const [personalDetails, setPersonalDetails] = useState<any>();
   const [isAuthCompleted, setIsAuthCompleted] = useState(false);
 
   const signIn = async ({ email, password }: IUserForSignIn) => {
@@ -197,6 +200,8 @@ const AuthProvider = ({ children }: Props) => {
       value={{
         user,
         setUser,
+        personalDetails,
+        setPersonalDetails,
         isAuthCompleted,
         setIsAuthCompleted,
         signIn,

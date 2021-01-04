@@ -11,6 +11,7 @@ import ShoppingCart from './ShoppingCart';
 import ShoppingCartItem from './ShoppingCartItem';
 import WishListItem from './WishListItem';
 import SearchResultItem from './SearchResultItem';
+import CreditCard from './CreditCard';
 
 export {
   Input,
@@ -26,4 +27,5 @@ export {
   ShoppingCartItem,
   WishListItem,
   SearchResultItem,
+  CreditCard,
 };

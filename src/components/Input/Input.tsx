@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react';
-import { View, TextInput, TextInputProps, StyleSheet } from 'react-native';
+import { View, TextInput, TextInputProps, StyleProp, ViewStyle } from 'react-native';
 import { Colors } from '../../styles';
 import styles from './Input.styles';
 
@@ -7,6 +7,7 @@ interface Props extends TextInputProps {
   iconLeft?: any;
   iconRight?: any;
   iconOutside?: any;
+  inputStyle?: StyleProp<ViewStyle>;
   radius?: number;
 }
 
@@ -17,6 +18,7 @@ const Input = forwardRef(
       iconLeft,
       iconRight,
       iconOutside,
+      inputStyle,
       radius,
       placeholder,
       secureTextEntry,
@@ -31,6 +33,7 @@ const Input = forwardRef(
         <View
           style={[
             styles.inputContainer,
+            inputStyle,
             radius && { borderRadius: radius },
             iconOutside && styles.inputWithIconOutside,
           ]}>

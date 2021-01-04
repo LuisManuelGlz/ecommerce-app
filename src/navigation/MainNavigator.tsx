@@ -15,6 +15,8 @@ import { Colors, Font } from '../styles';
 import { IProduct } from '../interfaces/IProduct';
 import ProductsProvider from '../context/ProductsContext';
 import { ShoppingCart } from '../components';
+import PaymentScreen from '../screens/Payment';
+import PaymentMethodsScreen from '../screens/PaymentMethods';
 
 export type MainStackParamList = {
   Home: undefined;
@@ -22,6 +24,8 @@ export type MainStackParamList = {
   ProductDetails: {
     product: IProduct;
   };
+  Payment: undefined;
+  PaymentMethods: undefined;
   Searching: undefined;
   SearchResult: { search: string };
   ChangeEmail: undefined;
@@ -66,6 +70,16 @@ const MainNavigator = () => {
             title: '',
             headerRight: () => <ShoppingCart />,
           }}
+        />
+        <MainStack.Screen
+          name="Payment"
+          component={PaymentScreen}
+          options={{ title: 'Pago' }}
+        />
+        <MainStack.Screen
+          name="PaymentMethods"
+          component={PaymentMethodsScreen}
+          options={{ title: 'Métodos de pago' }}
         />
         <MainStack.Screen
           name="Searching"

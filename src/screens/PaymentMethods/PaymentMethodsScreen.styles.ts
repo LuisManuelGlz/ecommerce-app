@@ -4,24 +4,38 @@ import { Colors } from '../../styles';
 export default StyleSheet.create({
   container: {
     flex: 1,
+    paddingHorizontal: 20,
   },
-  noProducts: {
+  title: {
+    marginBottom: 25,
+    paddingHorizontal: 20,
+  },
+  addPaymentMethodButton: {
+    width: 36,
+    height: 36,
+    justifyContent: 'center',
     alignItems: 'center',
-    justifyContent: 'space-around',
-    height: '30%',
+    borderRadius: 50,
+    backgroundColor: Colors.light,
+    position: 'absolute',
+    right: 16,
+    bottom: 19,
   },
   renderContent: {
     backgroundColor: Colors.darkKnight,
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 20,
-    height: 300,
+    height: 525,
   },
   messageContainer: {
     borderWidth: 3,
     borderRadius: 50,
     borderColor: Colors.light,
     width: 200,
+  },
+  inputStyle: {
+    height: 64,
   },
   renderBackDrop: {
     backgroundColor: '#979797',
@@ -36,8 +50,4 @@ export default StyleSheet.create({
     height: '100%',
     backgroundColor: 'transparent',
   },
-  buttonContainer: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-  }
 });

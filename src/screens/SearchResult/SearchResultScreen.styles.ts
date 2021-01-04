@@ -10,7 +10,7 @@ export default StyleSheet.create({
     justifyContent: 'space-around',
     height: '30%',
   },
-  searchTitle: {
+  title: {
     marginBottom: 25,
     paddingHorizontal: 20,
   },
