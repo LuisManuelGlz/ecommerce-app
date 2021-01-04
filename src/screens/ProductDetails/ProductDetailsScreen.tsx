@@ -41,22 +41,8 @@ const ProductScreen = ({ route }: Props) => {
   const sheetRef = createRef<BottomSheet>();
 
   const renderContent = () => (
-    <View
-      style={{
-        backgroundColor: Colors.darkKnight,
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: 20,
-        height: 300,
-      }}>
-      <View
-        style={{
-          borderWidth: 3,
-          borderRadius: 50,
-          borderColor: Colors.light,
-          width: 200,
-        }}
-      />
+    <View style={styles.renderContent}>
+      <View style={styles.messageContainer} />
       <Text size="h3" style={{ textAlign: 'center' }}>
         ¿Estás seguro de que deseas remover el artículo{' '}
         <Text size="h3" color="primary">
@@ -81,23 +67,13 @@ const ProductScreen = ({ route }: Props) => {
 
   const renderBackDrop = () => (
     <Animated.View
-      style={{
-        opacity: opacity,
-        backgroundColor: '#979797',
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-      }}>
-      <TouchableOpacity
-        style={{
-          width: '100%',
-          height: '100%',
-          backgroundColor: 'transparent',
-        }}
-        onPress={onClose}
-      />
+      style={[
+        styles.renderBackDrop,
+        {
+          opacity: opacity,
+        },
+      ]}>
+      <TouchableOpacity style={styles.backDropTouchable} onPress={onClose} />
     </Animated.View>
   );
 
