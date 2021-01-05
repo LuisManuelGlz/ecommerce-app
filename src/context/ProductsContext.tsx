@@ -4,6 +4,7 @@ import firestore, {
 } from '@react-native-firebase/firestore';
 import { IProduct } from '../interfaces/IProduct';
 import { IPaymentMethod } from '../interfaces/IPaymentMethod';
+import { IShippingAddress } from '../interfaces/IShippingAddress';
 import { AuthContext } from './AuthContext';
 
 type AuthContextType = {
@@ -13,6 +14,7 @@ type AuthContextType = {
   productsInCart: IProduct[];
   productsInWishList: IProduct[];
   paymentMethods: IPaymentMethod[];
+  shippingAddresses: IShippingAddress[];
   fetchProducts: () => void;
   addProductToShoppingCart: (product: IProduct) => void;
   removeProductFromShoppingCart: (productId: string) => void;
@@ -21,6 +23,8 @@ type AuthContextType = {
   searchProducts: (search: string) => Promise<IProduct[] | undefined>;
   fetchPaymentMethods: () => void;
   addPaymentMethod: (paymentMethod: IPaymentMethod) => void;
+  fetchShippingAddresses: () => void;
+  addShippingAddress: (shippingAddress: IShippingAddress) => void;
 };
 
 interface Props {
@@ -37,6 +41,9 @@ const ProductsProvider = ({ children }: Props) => {
   const [productsInCart, setProductsInCart] = useState<IProduct[]>([]);
   const [productsInWishList, setProductsInWishList] = useState<IProduct[]>([]);
   const [paymentMethods, setPaymentMethods] = useState<IPaymentMethod[]>([]);
+  const [shippingAddresses, setShippingAddresses] = useState<
+    IShippingAddress[]
+  >([]);
 
   const fetchProducts = async () => {
     try {
@@ -200,7 +207,10 @@ const ProductsProvider = ({ children }: Props) => {
         .get();
 
       const paymentMethods = userSnapshot.data()?.paymentMethods;
+
       if (paymentMethods) {
+        const paymentMethodsToSet: IPaymentMethod[] = [];
+
         paymentMethods.forEach(
           async (paymentMethod: FirebaseFirestoreTypes.DocumentData) => {
             const paymentMethodSnapshot = await firestore()
@@ -208,13 +218,12 @@ const ProductsProvider = ({ children }: Props) => {
               .doc(paymentMethod.id)
               .get();
 
-            setPaymentMethods((paymentMethod) => [
-              ...paymentMethod,
-              {
-                id: paymentMethodSnapshot.id,
-                ...paymentMethodSnapshot.data(),
-              } as IPaymentMethod,
-            ]);
+            paymentMethodsToSet.push({
+              id: paymentMethodSnapshot.id,
+              ...paymentMethodSnapshot.data(),
+            } as IPaymentMethod);
+
+            setPaymentMethods([...paymentMethodsToSet]);
           },
         );
       }
@@ -246,6 +255,62 @@ const ProductsProvider = ({ children }: Props) => {
     }
   };
 
+  const fetchShippingAddresses = async () => {
+    try {
+      const userSnapshot = await firestore()
+        .collection('users')
+        .doc(user?.uid)
+        .get();
+
+      const shippingAddresses = userSnapshot.data()?.shippingAddresses;
+
+      if (shippingAddresses) {
+        const shippingAddressesToSet: IShippingAddress[] = [];
+
+        shippingAddresses.forEach(
+          async (shippingAddress: FirebaseFirestoreTypes.DocumentData) => {
+            const shippingAddressSnapshot = await firestore()
+              .collection('shippingAddresses')
+              .doc(shippingAddress.id)
+              .get();
+
+            shippingAddressesToSet.push({
+              id: shippingAddressSnapshot.id,
+              ...shippingAddressSnapshot.data(),
+            } as IShippingAddress);
+
+            setShippingAddresses([...shippingAddressesToSet]);
+          },
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const addShippingAddress = async (shippingAddress: IShippingAddress) => {
+    try {
+      const { id } = await firestore()
+        .collection('shippingAddresses')
+        .add(shippingAddress);
+
+      await firestore()
+        .collection('users')
+        .doc(user?.uid)
+        .update({
+          shippingAddresses: firestore.FieldValue.arrayUnion(
+            firestore().doc(`shippingAddresses/${id}`),
+          ),
+        });
+      setShippingAddresses((shippingAddresses) => [
+        ...shippingAddresses,
+        { id, ...shippingAddress },
+      ]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <ProductsContext.Provider
       value={{
@@ -263,6 +328,9 @@ const ProductsProvider = ({ children }: Props) => {
         paymentMethods,
         fetchPaymentMethods,
         addPaymentMethod,
+        shippingAddresses,
+        fetchShippingAddresses,
+        addShippingAddress,
       }}>
       {children}
     </ProductsContext.Provider>

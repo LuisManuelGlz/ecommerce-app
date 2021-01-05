@@ -19,6 +19,7 @@ const AccountRoute = () => {
         iconRight={
           <Ionicons name="chevron-forward" size={30} color={Colors.light} />
         }
+        onPress={() => navigation.navigate('PaymentMethods')}
       />
       <AccountOption
         style={styles.accountOption}
@@ -39,6 +40,7 @@ const AccountRoute = () => {
         iconRight={
           <Ionicons name="chevron-forward" size={30} color={Colors.light} />
         }
+        onPress={() => navigation.navigate('ShippingAddress')}
       />
       <AccountOption
         style={styles.accountOption}

@@ -17,6 +17,8 @@ import ProductsProvider from '../context/ProductsContext';
 import { ShoppingCart } from '../components';
 import PaymentScreen from '../screens/Payment';
 import PaymentMethodsScreen from '../screens/PaymentMethods';
+import ShippingAddressScreen from '../screens/ShippingAddress';
+import SaveShippingAddressScreen from '../screens/SaveShippingAddress/SaveShippingAddressScreen';
 
 export type MainStackParamList = {
   Home: undefined;
@@ -26,6 +28,8 @@ export type MainStackParamList = {
   };
   Payment: undefined;
   PaymentMethods: undefined;
+  ShippingAddress: undefined;
+  SaveShippingAddress: undefined;
   Searching: undefined;
   SearchResult: { search: string };
   ChangeEmail: undefined;
@@ -80,6 +84,16 @@ const MainNavigator = () => {
           name="PaymentMethods"
           component={PaymentMethodsScreen}
           options={{ title: 'Métodos de pago' }}
+        />
+        <MainStack.Screen
+          name="ShippingAddress"
+          component={ShippingAddressScreen}
+          options={{ title: 'Direcciones de envío' }}
+        />
+        <MainStack.Screen
+          name="SaveShippingAddress"
+          component={SaveShippingAddressScreen}
+          options={{ title: 'Direcciones de envío' }}
         />
         <MainStack.Screen
           name="Searching"

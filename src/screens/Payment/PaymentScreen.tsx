@@ -17,7 +17,7 @@ const PaymentScreen = () => {
       <View style={styles.addressCard}>
         <View style={styles.addressCardHeader}>
           <Text size="h5">{personalDetails.fullName}</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('ShippingAddress')}>
             <Text size="h4" color="primary">
               Cambiar
             </Text>
