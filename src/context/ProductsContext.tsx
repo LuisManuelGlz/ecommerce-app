@@ -8,6 +8,7 @@ import { IShippingAddress } from '../interfaces/IShippingAddress';
 import { AuthContext } from './AuthContext';
 
 type AuthContextType = {
+  isLoading: boolean;
   newer: IProduct[];
   mostSold: IProduct[];
   gaming: IProduct[];
@@ -35,6 +36,7 @@ export const ProductsContext = createContext({} as AuthContextType);
 
 const ProductsProvider = ({ children }: Props) => {
   const { user } = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [newer, setNewer] = useState<IProduct[]>([]);
   const [mostSold, setMostSold] = useState<IProduct[]>([]);
   const [gaming, setGaming] = useState<IProduct[]>([]);
@@ -46,6 +48,8 @@ const ProductsProvider = ({ children }: Props) => {
   >([]);
 
   const fetchProducts = async () => {
+    if (!isLoading) setIsLoading(true);
+
     try {
       const productsSnapshot = await firestore().collection('products').get();
       productsSnapshot.forEach((documentSnapshot) => {
@@ -103,6 +107,8 @@ const ProductsProvider = ({ children }: Props) => {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -200,6 +206,8 @@ const ProductsProvider = ({ children }: Props) => {
   };
 
   const fetchPaymentMethods = async () => {
+    if (!isLoading) setIsLoading(true);
+
     try {
       const userSnapshot = await firestore()
         .collection('users')
@@ -229,6 +237,8 @@ const ProductsProvider = ({ children }: Props) => {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -256,6 +266,8 @@ const ProductsProvider = ({ children }: Props) => {
   };
 
   const fetchShippingAddresses = async () => {
+    if (!isLoading) setIsLoading(true);
+
     try {
       const userSnapshot = await firestore()
         .collection('users')
@@ -285,6 +297,8 @@ const ProductsProvider = ({ children }: Props) => {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -314,6 +328,7 @@ const ProductsProvider = ({ children }: Props) => {
   return (
     <ProductsContext.Provider
       value={{
+        isLoading,
         newer,
         mostSold,
         gaming,

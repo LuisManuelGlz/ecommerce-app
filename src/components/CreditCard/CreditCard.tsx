@@ -54,12 +54,20 @@ const CreditCard = ({ name, date, type, suffix, style }: Props) => {
       </View>
       <View style={styles.footerContainer}>
         <View>
-          <Text>Nombre en la tarjeta</Text>
-          <Text style={styles.text}>{name}</Text>
+          {name && (
+            <Fragment>
+              <Text>Nombre en la tarjeta</Text>
+              <Text style={styles.text}>{name}</Text>
+            </Fragment>
+          )}
         </View>
         <View>
-          <Text>Válida hasta</Text>
-          <Text style={styles.text}>{date}</Text>
+          {date && (
+            <Fragment>
+              <Text>Válida hasta</Text>
+              <Text style={styles.text}>{date}</Text>
+            </Fragment>
+          )}
         </View>
       </View>
     </View>

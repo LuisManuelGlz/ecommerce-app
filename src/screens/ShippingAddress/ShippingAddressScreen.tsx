@@ -8,15 +8,20 @@ import { Colors } from '../../styles';
 import styles from './ShippingAddressScreen.styles';
 import { ProductsContext } from '../../context/ProductsContext';
 import { IShippingAddress } from '../../interfaces/IShippingAddress';
+import LoadingScreen from '../LoadingScreen';
 
 const ShippingAddressScreen = () => {
   const headerHeight = useHeaderHeight();
   const navigation = useNavigation();
-  const { shippingAddresses, fetchShippingAddresses } = useContext(ProductsContext);
+  const { isLoading, shippingAddresses, fetchShippingAddresses } = useContext(
+    ProductsContext,
+  );
 
   useEffect(() => {
     fetchShippingAddresses();
   }, []);
+
+  if (isLoading) return <LoadingScreen />;
 
   return (
     <View style={[styles.container, { marginTop: headerHeight }]}>
@@ -34,10 +39,12 @@ const ShippingAddressScreen = () => {
               </TouchableOpacity>
             </View>
             <Text size="h5">{item.address}</Text>
-            <Text size="h5">
-              {item.city}, {item.state}, {item.state} {item.postalCode},{' '}
-              {item.country}
-            </Text>
+            {item.city && (
+              <Text size="h5">
+                {item.city}, {item.state}, {item.state} {item.postalCode},{' '}
+                {item.country}
+              </Text>
+            )}
           </View>
         )}
         contentContainerStyle={{ paddingHorizontal: 20 }}

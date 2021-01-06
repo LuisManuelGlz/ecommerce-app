@@ -17,6 +17,7 @@ import validation from './PaymentMethodsValidation';
 import { Colors } from '../../styles';
 import { ProductsContext } from '../../context/ProductsContext';
 import { IPaymentMethod } from '../../interfaces/IPaymentMethod';
+import LoadingScreen from '../LoadingScreen';
 
 type FormData = {
   cardName: string;
@@ -27,9 +28,12 @@ type FormData = {
 
 const PaymentMethodsScreen = () => {
   const headerHeight = useHeaderHeight();
-  const { addPaymentMethod, paymentMethods, fetchPaymentMethods } = useContext(
-    ProductsContext,
-  );
+  const {
+    isLoading,
+    addPaymentMethod,
+    paymentMethods,
+    fetchPaymentMethods,
+  } = useContext(ProductsContext);
   const { control, handleSubmit, errors, setValue } = useForm<FormData>();
   const opacity = new Animated.Value(0.5);
   const [isOpen, setIsOpen] = useState(false);
@@ -42,6 +46,8 @@ const PaymentMethodsScreen = () => {
   useEffect(() => {
     fetchPaymentMethods();
   }, []);
+
+  if (isLoading) return <LoadingScreen />;
 
   const onSubmit = (formData: FormData) => {
     addPaymentMethod({ ...formData });

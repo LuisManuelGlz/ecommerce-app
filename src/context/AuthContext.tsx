@@ -106,6 +106,32 @@ const AuthProvider = ({ children }: Props) => {
         cardNumber,
       });
 
+      const paymentMethod = await firestore()
+        .collection('paymentMethods')
+        .add({ cardNumber });
+
+      await firestore()
+        .collection('users')
+        .doc(user?.uid)
+        .update({
+          paymentMethods: firestore.FieldValue.arrayUnion(
+            firestore().doc(`paymentMethods/${paymentMethod.id}`),
+          ),
+        });
+
+      const shippingAddress = await firestore()
+        .collection('shippingAddresses')
+        .add({ fullName, address });
+
+      await firestore()
+        .collection('users')
+        .doc(user?.uid)
+        .update({
+          shippingAddresses: firestore.FieldValue.arrayUnion(
+            firestore().doc(`shippingAddresses/${shippingAddress.id}`),
+          ),
+        });
+
       setIsAuthCompleted(true);
 
       alert(
