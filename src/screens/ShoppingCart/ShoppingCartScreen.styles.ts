@@ -37,7 +37,6 @@ export default StyleSheet.create({
     backgroundColor: 'transparent',
   },
   buttonContainer: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+    padding: 30,
   }
 });

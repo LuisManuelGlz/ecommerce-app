@@ -39,7 +39,7 @@ const ShoppingCartScreen = () => {
           onPress={() => {
             onClose();
             if (productSelected) {
-              removeProductFromShoppingCart(productSelected.id);
+              removeProductFromShoppingCart(productSelected);
             }
           }}
         />
@@ -83,7 +83,7 @@ const ShoppingCartScreen = () => {
   return (
     <Fragment>
       <View style={[styles.container, { marginTop: headerHeight }]}>
-        {productsInCart.length === 0 && (
+        {productsInCart.length === 0 ? (
           <View style={styles.noProducts}>
             <Text size="h2">No hay productos en tu carrito</Text>
             <Button
@@ -96,27 +96,30 @@ const ShoppingCartScreen = () => {
               onPress={() => navigation.goBack()}
             />
           </View>
-        )}
-        <FlatList
-          data={productsInCart}
-          renderItem={({ item }: { item: IProduct }) => (
-            <ShoppingCartItem
-              key={item.id}
-              product={item}
-              setProductSelected={setProductSelected}
-              onRemove={onOpen}
+        ) : (
+          <Fragment>
+            <FlatList
+              data={productsInCart}
+              renderItem={({ item }: { item: IProduct }) => (
+                <ShoppingCartItem
+                  key={item.id}
+                  product={item}
+                  setProductSelected={setProductSelected}
+                  onRemove={onOpen}
+                />
+              )}
+              contentContainerStyle={{ paddingHorizontal: 20 }}
             />
-          )}
-          contentContainerStyle={{ paddingHorizontal: 20 }}
-        />
-        <View style={styles.buttonContainer}>
-          <Button
-            block
-            title="Realizar compra"
-            background="primary"
-            onPress={() => navigation.navigate('Payment')}
-          />
-        </View>
+            <View style={styles.buttonContainer}>
+              <Button
+                block
+                title="Realizar compra"
+                background="primary"
+                onPress={() => navigation.navigate('Payment')}
+              />
+            </View>
+          </Fragment>
+        )}
       </View>
       <BottomSheet
         ref={sheetRef}

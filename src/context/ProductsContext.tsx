@@ -16,9 +16,10 @@ type AuthContextType = {
   productsInWishList: IProduct[];
   paymentMethods: IPaymentMethod[];
   shippingAddresses: IShippingAddress[];
+  shoppingCartTotal: number;
   fetchProducts: () => void;
   addProductToShoppingCart: (product: IProduct) => void;
-  removeProductFromShoppingCart: (productId: string) => void;
+  removeProductFromShoppingCart: (product: IProduct) => void;
   addProductToWishList: (product: IProduct) => void;
   removeProductFromWishList: (productId: string) => void;
   searchProducts: (search: string) => Promise<IProduct[] | undefined>;
@@ -26,6 +27,7 @@ type AuthContextType = {
   addPaymentMethod: (paymentMethod: IPaymentMethod) => void;
   fetchShippingAddresses: () => void;
   addShippingAddress: (shippingAddress: IShippingAddress) => void;
+  orderProducts: () => void;
 };
 
 interface Props {
@@ -41,6 +43,7 @@ const ProductsProvider = ({ children }: Props) => {
   const [mostSold, setMostSold] = useState<IProduct[]>([]);
   const [gaming, setGaming] = useState<IProduct[]>([]);
   const [productsInCart, setProductsInCart] = useState<IProduct[]>([]);
+  const [shoppingCartTotal, setShoppingCartTotal] = useState<number>(0);
   const [productsInWishList, setProductsInWishList] = useState<IProduct[]>([]);
   const [paymentMethods, setPaymentMethods] = useState<IPaymentMethod[]>([]);
   const [shippingAddresses, setShippingAddresses] = useState<
@@ -90,6 +93,8 @@ const ProductsProvider = ({ children }: Props) => {
         );
       }
 
+      setShoppingCartTotal(userSnapshot.data()?.shoppingCartTotal || 0);
+
       const wishList = userSnapshot.data()?.wishList;
       if (wishList) {
         wishList.forEach(
@@ -121,26 +126,30 @@ const ProductsProvider = ({ children }: Props) => {
           shoppingCart: firestore.FieldValue.arrayUnion(
             firestore().doc(`products/${product.id}`),
           ),
+          shoppingCartTotal: firestore.FieldValue.increment(product.price),
         });
       setProductsInCart((products) => [...products, product]);
+      setShoppingCartTotal((total) => total + product.price);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const removeProductFromShoppingCart = async (productId: string) => {
+  const removeProductFromShoppingCart = async (product: IProduct) => {
     try {
       await firestore()
         .collection('users')
         .doc(user?.uid)
         .update({
           shoppingCart: firestore.FieldValue.arrayRemove(
-            firestore().doc(`products/${productId}`),
+            firestore().doc(`products/${product.id}`),
           ),
+          shoppingCartTotal: firestore.FieldValue.increment(-product.price),
         });
       setProductsInCart((products) =>
-        products.filter((products) => products.id !== productId),
+        products.filter((products) => products.id !== product.id),
       );
+      setShoppingCartTotal((total) => total - product.price);
     } catch (error) {
       console.log(error);
     }
@@ -325,6 +334,50 @@ const ProductsProvider = ({ children }: Props) => {
     }
   };
 
+  const orderProducts = async () => {
+    try {
+      const userSnapshot = await firestore()
+        .collection('users')
+        .doc(user?.uid)
+        .get();
+
+      const { id } = await firestore()
+        .collection('orders')
+        .add({ total: shoppingCartTotal });
+
+      const shoppingCart = userSnapshot.data()?.shoppingCart;
+
+      shoppingCart.forEach(
+        async (product: FirebaseFirestoreTypes.DocumentData) => {
+          await firestore()
+            .collection('orders')
+            .doc(id)
+            .update({
+              orders: firestore.FieldValue.arrayUnion(
+                firestore().doc(`products/${product.id}`),
+              ),
+            });
+        },
+      );
+
+      await firestore()
+        .collection('users')
+        .doc(user?.uid)
+        .update({
+          shoppingCart: [],
+          shoppingCartTotal: 0,
+          orders: firestore.FieldValue.arrayUnion(
+            firestore().doc(`orders/${id}`),
+          ),
+        });
+
+      setProductsInCart([]);
+      setShoppingCartTotal(0);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <ProductsContext.Provider
       value={{
@@ -334,6 +387,7 @@ const ProductsProvider = ({ children }: Props) => {
         gaming,
         productsInCart,
         productsInWishList,
+        shoppingCartTotal,
         fetchProducts,
         addProductToShoppingCart,
         removeProductFromShoppingCart,
@@ -346,6 +400,7 @@ const ProductsProvider = ({ children }: Props) => {
         shippingAddresses,
         fetchShippingAddresses,
         addShippingAddress,
+        orderProducts,
       }}>
       {children}
     </ProductsContext.Provider>

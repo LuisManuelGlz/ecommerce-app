@@ -56,7 +56,7 @@ const ProductScreen = ({ route }: Props) => {
           background="danger"
           onPress={() => {
             onClose();
-            removeProductFromShoppingCart(product.id);
+            removeProductFromShoppingCart(product);
             navigation.goBack();
           }}
         />
