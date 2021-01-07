@@ -142,7 +142,7 @@ const PaymentMethodsScreen = () => {
             returnKeyType="next"
             onSubmitEditing={() => cvcInput.current?.focus()}
             keyboardType="numeric"
-            maxLength={4}
+            maxLength={5}
             blurOnSubmit={false}
             onBlur={onBlur}
             placeholder="Fecha de expiración"
